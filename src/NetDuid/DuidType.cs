@@ -33,6 +33,6 @@
         ///  Universally Unique Identifier (UUID) (RFC6355)
         /// </summary>
         /// <remarks>DUID type code of <c>0x0004</c></remarks>
-        Uuid = 4
+        Uuid = 4,
     }
 }

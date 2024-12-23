@@ -360,7 +360,7 @@ namespace NetDuid.Tests
                 TestCases(-1, new byte[] { 0xFF, 0x00, 0x00 }, new byte[] { 0xFF, 0xFF, 0xFF, 0xFF }),
                 TestCases(-1, new byte[] { 0xFF, 0xFF, 0xFF }, new byte[] { 0xFF, 0x00, 0x00, 0x00 }),
                 TestCases(-1, new byte[] { 0x00, 0x00, 0x00 }, new byte[] { 0x00, 0x00, 0x01 }),
-                TestCases(-1, new byte[] { 0x00, 0x00, 0x00 }, new byte[] { 0x80, 0x00, 0x00 })
+                TestCases(-1, new byte[] { 0x00, 0x00, 0x00 }, new byte[] { 0x80, 0x00, 0x00 }),
             }.SelectMany(tc => tc);
 
             foreach (var testCase in deepTestCases)
@@ -471,7 +471,7 @@ namespace NetDuid.Tests
                 TestCases(false, new byte[] { 0xFF, 0x00, 0x00 }, new byte[] { 0xFF, 0xFF, 0xFF, 0xFF }),
                 TestCases(false, new byte[] { 0xFF, 0xFF, 0xFF }, new byte[] { 0xFF, 0x00, 0x00, 0x00 }),
                 TestCases(false, new byte[] { 0x00, 0x00, 0x00 }, new byte[] { 0x00, 0x00, 0x01 }),
-                TestCases(false, new byte[] { 0x00, 0x00, 0x00 }, new byte[] { 0x80, 0x00, 0x00 })
+                TestCases(false, new byte[] { 0x00, 0x00, 0x00 }, new byte[] { 0x80, 0x00, 0x00 }),
             }.SelectMany(tc => tc);
 
             foreach (var testCase in deepTestCases)

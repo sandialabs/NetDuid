@@ -1,4 +1,4 @@
-Robert H. Engelhardt
-Drew Antonich
-Stephen Jackson
-Sterling Violette
+- [Robert H. Engelhardt](https://rheone.com/)
+- Drew Antonich
+- Stephen Jackson
+- Sterling Violette
