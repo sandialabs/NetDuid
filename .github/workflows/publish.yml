@@ -27,10 +27,10 @@ jobs:
       run: dotnet build ./src --no-restore
     - name: Extract version
       id: extract_version
-      run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+      run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
     - name: Pack
-      run: dotnet pack --configuration Release --no-build --output ./output /p:PackageVersion=${{ env.VERSION }}
+      run: dotnet pack ./src/NetDuid.sln --configuration Release --no-build --output ./packages /p:PackageVersion=${{ env.VERSION }}
     - name: Publish to GitHub Packages
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: dotnet nuget push ./output/*.nupkg --source "https://github.com/sandialabs/NetDuid/index.json" --api-key $GITHUB_TOKEN
+      run: dotnet nuget push ./packages/*.nupkg --source "https://github.com/sandialabs/NetDuid/index.json" --api-key $GITHUB_TOKEN
