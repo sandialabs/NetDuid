@@ -1,0 +1,32 @@
+# .NET Publish semver tag Workflow
+
+name: Publish .NET Package
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 9.0.x
+    - name: Restore dotnet tools
+      run: dotnet tool restore
+    - name: Restore dependencies
+      run: dotnet restore ./src
+    - name: Build
+      run: dotnet build ./src --no-restore
+    - name: Pack
+      run: dotnet pack --configuration Release --no-build --output ./output /p:PackageVersion=${{ steps.extract_version.outputs.VERSION }}
+    - name: Publish to GitHub Packages
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: dotnet nuget push ./output/*.nupkg --source "https://github.com/sandialabs/NetDuid/index.json" --api-key $GITHUB_TOKEN
