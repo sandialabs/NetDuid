@@ -6,6 +6,7 @@ on:
   push:
     tags:
       - 'v*.*.*'
+      - 'v*.*.*-*'
 
 jobs:
   build:
@@ -24,8 +25,11 @@ jobs:
       run: dotnet restore ./src
     - name: Build
       run: dotnet build ./src --no-restore
+    - name: Extract version
+      id: extract_version
+      run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
     - name: Pack
-      run: dotnet pack --configuration Release --no-build --output ./output /p:PackageVersion=${{ steps.extract_version.outputs.VERSION }}
+      run: dotnet pack --configuration Release --no-build --output ./output /p:PackageVersion=${{ env.VERSION }}
     - name: Publish to GitHub Packages
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
