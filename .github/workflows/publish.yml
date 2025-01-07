@@ -5,32 +5,32 @@ name: Publish .NET Package
 on:
   push:
     tags:
-      - 'v*.*.*'
-      - 'v*.*.*-*'
+      - "v*.*.*"
+      - "v*.*.*-*"
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 9.0.x
-    - name: Restore dotnet tools
-      run: dotnet tool restore
-    - name: Restore dependencies
-      run: dotnet restore ./src
-    - name: Build
-      run: dotnet build ./src --no-restore
-    - name: Extract version
-      id: extract_version
-      run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
-    - name: Pack
-      run: dotnet pack ./src/NetDuid.sln --configuration Release --no-build --output ./packages /p:PackageVersion=${{ env.VERSION }}
-    - name: Publish to GitHub Packages
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: dotnet nuget push ./packages/*.nupkg --source "https://github.com/sandialabs/index.json" --api-key $GITHUB_TOKEN
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+      - name: Restore dotnet tools
+        run: dotnet tool restore
+      - name: Restore dependencies
+        run: dotnet restore ./src
+      - name: Build
+        run: dotnet build ./src --no-restore
+      - name: Extract version
+        id: extract_version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
+      - name: Pack
+        run: dotnet pack ./src/NetDuid/NetDuid.csproj --configuration Release --no-build --output ./packages /p:PackageVersion=${{ env.VERSION }}
+      - name: Publish to GitHub Packages
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: dotnet nuget push ./packages/*.nupkg --source "https://nuget.pkg.github.com/sandialabs/netduid/index.json" --api-key $GITHUB_TOKEN
