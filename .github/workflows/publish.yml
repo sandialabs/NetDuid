@@ -33,4 +33,4 @@ jobs:
       - name: Publish to GitHub Packages
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: dotnet nuget push ./packages/*.nupkg --source "https://nuget.pkg.github.com/sandialabs/netduid/index.json" --api-key $GITHUB_TOKEN
+        run: dotnet nuget push ./packages/*.nupkg --source "https://nuget.pkg.github.com/sandialabs/index.json" --api-key $GITHUB_TOKEN
