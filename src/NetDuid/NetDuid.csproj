@@ -22,7 +22,7 @@
     <Authors>The Production Tools Team</Authors>
     <Copyright>Copyright 2024 National Technology &amp; Engineering Solutions of Sandia, LLC (NTESS). Under the terms of Contract DE-NA0003525 with NTESS, the U.S. Government retains certain rights in this software</Copyright>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageTags>DUID;DHCP;DHCPv6;rfc8415;rfc6355</PackageTags>
+    <PackageTags>DUID;DHCP;DHCPv6;IPv6;rfc8415;rfc6355</PackageTags>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
     <RepositoryUrl>https://github.com/sandialabs/NetDuid.git</RepositoryUrl>
     <PackageProjectUrl>https://github.com/sandialabs/NetDuid</PackageProjectUrl>

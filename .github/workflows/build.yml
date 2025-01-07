@@ -1,6 +1,6 @@
-# .NET project build workflow
+# .NET Build and Test Workflow
 
-name: .NET
+name: Build and Test
 
 on:
   push:
@@ -14,7 +14,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - name: Checkout code
+      uses: actions/checkout@v4
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
@@ -22,8 +23,8 @@ jobs:
     - name: Restore dotnet tools
       run: dotnet tool restore
     - name: Restore dependencies
-      run: dotnet restore src
+      run: dotnet restore ./src
     - name: Build
-      run: dotnet build src --no-restore
+      run: dotnet build ./src --no-restore
     - name: Test
-      run: dotnet test src --no-build --verbosity normal
+      run: dotnet test ./src --no-build --verbosity normal
