@@ -37,4 +37,6 @@ jobs:
       - name: Publish to GitHub Packages
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: dotnet nuget push ./packages/*.nupkg --source "https://nuget.pkg.github.com/sandialabs/index.json" --api-key $GITHUB_TOKEN
+        run: dotnet nuget push ./packages/*.nupkg --source "https://nuget.pkg.github.com/sandialabs/index.json" --api-key $GITHUB_TOKEN --skip-duplicate
+      - name: Publish to nuget.org Packages
+        run: dotnet nuget push ./packages/*.nupkg --source "https://api.nuget.org/v3/index.json" --api-key ${{ secrets.NUGET_ORG_APIKEY }} --skip-duplicate
