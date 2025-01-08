@@ -14,20 +14,30 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Setup .NET
+
+      - name: Setup .NET SDKs
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 9.0.x
+          # .net 4.8.x is included by default in windows-latest
+          dotnet-version: |
+            6.0.x
+            7.0.x
+            8.0.x
+            9.0.x
+
       - name: Restore dotnet tools
         run: dotnet tool restore
+
       - name: Restore dependencies
         run: dotnet restore ./src
+
       - name: Build
         run: dotnet build ./src --no-restore
+
       - name: Test
         run: dotnet test ./src --no-build --verbosity normal
