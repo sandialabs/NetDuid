@@ -114,7 +114,7 @@ The `DuidType` enum emits the following values
 
 The `Duid` class implements `IEquatable<Duid>`, `IComparable<Duid>`, `IComparable` and the standard Equality and Comparison operators.
 
-The `CompareTo`, and its operators, is not done in mathematical order or bytes, but rather fist by byte length then by unsigned value. When using the comparison operators a `null` value is considered less than any non-`null` value.
+The `CompareTo`, and its operators, is not done in mathematical order or bytes, but rather first by byte length then by unsigned value. When using the comparison operators a `null` value is considered less than any non-`null` value.
 
 ## Developer Notes
 
