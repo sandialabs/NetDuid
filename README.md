@@ -1,5 +1,11 @@
 ﻿# NetDuid
 
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/sandialabs/NetDuid/build.yml?branch=main)
+[![NuGet Version](https://img.shields.io/nuget/v/NetDuid)](https://www.nuget.org/packages/NetDuid)
+[![GitHub Release](https://img.shields.io/github/v/release/sandialabs/NetDuid)](https://github.com/sandialabs/NetDuid/releases)
+[![GitHub Tag](https://img.shields.io/github/v/tag/sandialabs/NetDuid)](https://github.com/sandialabs/NetDuid/tags)
+![Targets](https://img.shields.io/badge/.NET%20Standard%202.0%20|%20.NET%206.0%20|%20.NET%207.0%20|%20.NET%208.0%20|%20.NET%209.0-blue)
+
 ## About the Project
 
 ### Background
