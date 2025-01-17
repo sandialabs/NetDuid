@@ -37,7 +37,7 @@ jobs:
         run: dotnet restore ./src
 
       - name: Build
-        run: dotnet build ./src --no-restore
+        run: dotnet build ./src --no-restore -p:VersionFromCI="0.0.0-cibuild"
 
       - name: Test
         run: dotnet test ./src --no-build --verbosity normal
