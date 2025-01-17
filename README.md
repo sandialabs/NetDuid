@@ -144,7 +144,7 @@ This project uses [Semantic Versioning](https://semver.org/)
 
 ### Targeting
 
-The project targets [.NET Standard 2.0](https://learn.microsoft.com/en-us/dotnet/standard/net-standard?tabs=net-standard-2-0), [.NET 6](https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-6), [.NET 7](https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-7), and [.NET 8](https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-8). The test project similarly targets .NET 6, .NET 7, and .NET 8, but targets [.NET Framework 4.8](https://dotnet.microsoft.com/en-us/download/dotnet-framework/net48) for the .NET Standard 2.0 tests.
+The project targets [.NET Standard 2.0](https://learn.microsoft.com/en-us/dotnet/standard/net-standard?tabs=net-standard-2-0), [.NET 6](https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-6), [.NET 7](https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-7), [.NET 8](https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-8), and [.NET 9](https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-9/overview). The test project similarly targets .NET 6, .NET 7, .NET 8, .NET 9, but targets [.NET Framework 4.8](https://dotnet.microsoft.com/en-us/download/dotnet-framework/net48) for the .NET Standard 2.0 tests.
 
 ### Commit Hook
 
@@ -176,10 +176,11 @@ This project was built by the Production Tools Team at Sandia National Laborator
 
 Including, but not limited to:
 
-- Robert H. Engelhardt
+- [Robert H. Engelhardt](https://rheone.com/)
 - Drew Antonich
 - Stephen Jackson
 - Sterling Violette
+- Madison Brewer
 
 ## Copyright
 
@@ -190,5 +191,3 @@ Including, but not limited to:
 > Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
 > http://www.apache.org/licenses/LICENSE-2.0
 > Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
-
-This project is licensed under the terms of Contract DE-NA0003525 with NTESS. The U.S. Government retains certain rights in this software.
