@@ -176,15 +176,15 @@ This project was built by the Production Tools Team at Sandia National Laborator
 
 Including, but not limited to:
 
-- [Robert H. Engelhardt](https://rheone.com/)
-- Drew Antonich
-- Stephen Jackson
-- Sterling Violette
-- Madison Brewer
+- [Robert H. Engelhardt](https://github.com/rheone)
+- [Drew Antonich](https://github.com/drewantonich)
+- [Stephen Jackson](https://github.com/scj7t4)
+- [Sterling Violette](https://github.com/Sterlinghv)
+- [Madison Brewer](https://github.com/mabdrew)
 
 ## Copyright
 
-> Copyright 2024 National Technology & Engineering Solutions of Sandia, LLC (NTESS). Under the terms of Contract DE-NA0003525 with NTESS, the U.S. Government retains certain rights in this software
+> Copyright 2025 National Technology & Engineering Solutions of Sandia, LLC (NTESS). Under the terms of Contract DE-NA0003525 with NTESS, the U.S. Government retains certain rights in this software
 
 ## License
 
