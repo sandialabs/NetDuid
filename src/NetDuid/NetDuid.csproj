@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
@@ -34,7 +34,7 @@
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <Company>Sandia National Laboratories</Company>
     <Authors>The Production Tools Team</Authors>
-    <Copyright>Copyright 2024 National Technology &amp; Engineering Solutions of Sandia, LLC (NTESS). Under the terms of Contract DE-NA0003525 with NTESS, the U.S. Government retains certain rights in this software</Copyright>
+    <Copyright>Copyright 2025 National Technology &amp; Engineering Solutions of Sandia, LLC (NTESS). Under the terms of Contract DE-NA0003525 with NTESS, the U.S. Government retains certain rights in this software</Copyright>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageTags>DUID;DHCP;DHCPv6;IPv6;rfc8415;rfc6355</PackageTags>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
