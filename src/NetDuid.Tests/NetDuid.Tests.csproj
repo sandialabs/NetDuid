@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>net48;net6.0;net7.0;net8.0;net9.0</TargetFrameworks>
@@ -13,7 +13,7 @@
     <Title>NetDuid Tests</Title>
     <Company>Sandia National Laboratories</Company>
     <Authors>The Production Tools Team</Authors>
-    <Copyright>Copyright 2024 National Technology &amp;amp; Engineering Solutions of Sandia, LLC (NTESS). Under the terms of Contract DE-NA0003525 with NTESS, the U.S. Government retains certain rights in this software.</Copyright>
+    <Copyright>Copyright 2025 National Technology &amp;amp; Engineering Solutions of Sandia, LLC (NTESS). Under the terms of Contract DE-NA0003525 with NTESS, the U.S. Government retains certain rights in this software.</Copyright>
   </PropertyGroup>
 
   <ItemGroup>
