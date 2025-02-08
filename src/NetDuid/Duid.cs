@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Runtime.Serialization;
-using System.Text.RegularExpressions;
 #if NET7_0_OR_GREATER
 using System.Diagnostics.CodeAnalysis;
 #endif
@@ -29,27 +28,6 @@ namespace NetDuid
         /// </summary>
         /// <remarks>This value should change uniquely when the serialization process of the serialized members change</remarks>
         private const int SerializableVersion = 0;
-
-        /// <summary>
-        ///     Regex pattern that should match a string of hexadecimal octet pairs delimited by a single dash ('-'), colon (':') or space (' ') character. Leading 0 in pair may be omitted.
-        /// </summary>
-        private const string DelimitedOctetsPattern =
-            @"^(?:[0-9a-fA-F]{1,2}(?<separator>[-: ]))(?:[0-9a-fA-F]{1,2}\k<separator>){0,128}[0-9a-fA-F]{1,2}$";
-
-        /// <summary>
-        ///     Regex pattern that should match a string of undelimited hexadecimal octet pairs.
-        /// </summary>
-        private const string UndelimitedOctetPattern = "^(?:[0-9a-fA-F]{2}){3,130}$";
-
-        /// <summary>
-        ///     Regular expression used to identify delimited octets
-        /// </summary>
-        private static readonly Regex DelimitedOctetsRegex = new Regex(DelimitedOctetsPattern, RegexOptions.Compiled);
-
-        /// <summary>
-        ///     Regular expression used to identify undelimited octets
-        /// </summary>
-        private static readonly Regex UndelimitedOctetsRegex = new Regex(UndelimitedOctetPattern, RegexOptions.Compiled);
 
         /// <summary>
         ///     The bytes that comprise the DUID
@@ -290,11 +268,11 @@ namespace NetDuid
 
             var trimmed = duidString.Trim();
 
-            if (DelimitedOctetsRegex.IsMatch(trimmed))
+            if (DuidRegexSource.GetDelimitedOctetsRegex().IsMatch(trimmed))
             {
                 return new Duid(DelimitedStringToBytes(trimmed, 1));
             }
-            else if (UndelimitedOctetsRegex.IsMatch(trimmed))
+            else if (DuidRegexSource.GetUndelimitedOctetsRegex().IsMatch(trimmed))
             {
                 // convert and return non-delimited string of octets into bytes
                 return new Duid(UndelimitedStringToBytes(trimmed));
