@@ -54,6 +54,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "issue templates", "issue te
 		..\.github\ISSUE_TEMPLATE\feature_request.md = ..\.github\ISSUE_TEMPLATE\feature_request.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetDuid.Benchmark", "NetDuid.Benchmark\NetDuid.Benchmark.csproj", "{64B57A7A-C060-4EFB-93E2-49809177AD51}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -68,6 +70,10 @@ Global
 		{2AE63F6D-4C66-48E0-8788-B38B7CE24CB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2AE63F6D-4C66-48E0-8788-B38B7CE24CB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2AE63F6D-4C66-48E0-8788-B38B7CE24CB3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{64B57A7A-C060-4EFB-93E2-49809177AD51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64B57A7A-C060-4EFB-93E2-49809177AD51}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64B57A7A-C060-4EFB-93E2-49809177AD51}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64B57A7A-C060-4EFB-93E2-49809177AD51}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
