@@ -41,9 +41,9 @@
       },
       "Roslynator.Formatting.Analyzers": {
         "type": "Direct",
-        "requested": "[4.12.11, )",
-        "resolved": "4.12.11",
-        "contentHash": "+6Rlz0wY5Rc1eceHytRjM3+Hg9kt8zDPfGOeutv2Yy62rQgyFhvFAAdOT+SP64jEj9MTIjiasO5W965NBWxi7g=="
+        "requested": "[4.13.0, )",
+        "resolved": "4.13.0",
+        "contentHash": "WxayP0vkpigClbmsRmt1Mn2kBEAE+klgeE9HSHECDyWDAvuPS2BV6CKWkm7/J/cGtFuaGn0yQhv3v4bbD6GnPg=="
       },
       "SonarAnalyzer.CSharp": {
         "type": "Direct",
@@ -106,9 +106,9 @@
       },
       "Roslynator.Formatting.Analyzers": {
         "type": "Direct",
-        "requested": "[4.12.11, )",
-        "resolved": "4.12.11",
-        "contentHash": "+6Rlz0wY5Rc1eceHytRjM3+Hg9kt8zDPfGOeutv2Yy62rQgyFhvFAAdOT+SP64jEj9MTIjiasO5W965NBWxi7g=="
+        "requested": "[4.13.0, )",
+        "resolved": "4.13.0",
+        "contentHash": "WxayP0vkpigClbmsRmt1Mn2kBEAE+klgeE9HSHECDyWDAvuPS2BV6CKWkm7/J/cGtFuaGn0yQhv3v4bbD6GnPg=="
       },
       "SonarAnalyzer.CSharp": {
         "type": "Direct",
@@ -166,9 +166,9 @@
       },
       "Roslynator.Formatting.Analyzers": {
         "type": "Direct",
-        "requested": "[4.12.11, )",
-        "resolved": "4.12.11",
-        "contentHash": "+6Rlz0wY5Rc1eceHytRjM3+Hg9kt8zDPfGOeutv2Yy62rQgyFhvFAAdOT+SP64jEj9MTIjiasO5W965NBWxi7g=="
+        "requested": "[4.13.0, )",
+        "resolved": "4.13.0",
+        "contentHash": "WxayP0vkpigClbmsRmt1Mn2kBEAE+klgeE9HSHECDyWDAvuPS2BV6CKWkm7/J/cGtFuaGn0yQhv3v4bbD6GnPg=="
       },
       "SonarAnalyzer.CSharp": {
         "type": "Direct",
@@ -226,9 +226,9 @@
       },
       "Roslynator.Formatting.Analyzers": {
         "type": "Direct",
-        "requested": "[4.12.11, )",
-        "resolved": "4.12.11",
-        "contentHash": "+6Rlz0wY5Rc1eceHytRjM3+Hg9kt8zDPfGOeutv2Yy62rQgyFhvFAAdOT+SP64jEj9MTIjiasO5W965NBWxi7g=="
+        "requested": "[4.13.0, )",
+        "resolved": "4.13.0",
+        "contentHash": "WxayP0vkpigClbmsRmt1Mn2kBEAE+klgeE9HSHECDyWDAvuPS2BV6CKWkm7/J/cGtFuaGn0yQhv3v4bbD6GnPg=="
       },
       "SonarAnalyzer.CSharp": {
         "type": "Direct",
@@ -286,9 +286,9 @@
       },
       "Roslynator.Formatting.Analyzers": {
         "type": "Direct",
-        "requested": "[4.12.11, )",
-        "resolved": "4.12.11",
-        "contentHash": "+6Rlz0wY5Rc1eceHytRjM3+Hg9kt8zDPfGOeutv2Yy62rQgyFhvFAAdOT+SP64jEj9MTIjiasO5W965NBWxi7g=="
+        "requested": "[4.13.0, )",
+        "resolved": "4.13.0",
+        "contentHash": "WxayP0vkpigClbmsRmt1Mn2kBEAE+klgeE9HSHECDyWDAvuPS2BV6CKWkm7/J/cGtFuaGn0yQhv3v4bbD6GnPg=="
       },
       "SonarAnalyzer.CSharp": {
         "type": "Direct",
