@@ -59,6 +59,31 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <!-- Nest Duid.*.cs under Duid.cs -->
+    <Compile Update="Duid.IComparable.cs">
+      <DependentUpon>Duid.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Duid.IEquatable.cs">
+      <DependentUpon>Duid.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Duid.IFormattable.cs">
+      <DependentUpon>Duid.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Duid.IParsable.cs">
+      <DependentUpon>Duid.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Duid.ISerializable.cs">
+      <DependentUpon>Duid.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Duid.Factory.cs">
+      <DependentUpon>Duid.cs</DependentUpon>
+    </Compile>    
+    <Compile Update="Duid.Operators.cs">
+      <DependentUpon>Duid.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
     <PackageReference Include="Microsoft.Bcl.HashCode" Version="6.0.0" />
   </ItemGroup>
