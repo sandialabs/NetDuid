@@ -17,6 +17,31 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <!-- Nest Duid.*.cs under DuidTests.cs -->
+    <Compile Update="Duid.IComparableTests.cs">
+      <DependentUpon>DuidTests.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Duid.IEquatableTests.cs">
+      <DependentUpon>DuidTests.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Duid.IFormattableTests.cs">
+      <DependentUpon>DuidTests.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Duid.IParsableTests.cs">
+      <DependentUpon>DuidTests.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Duid.ISerializableTests.cs">
+      <DependentUpon>DuidTests.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Duid.FactoryTests.cs">
+      <DependentUpon>DuidTests.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Duid.OperatorsTests.cs">
+      <DependentUpon>DuidTests.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  
+  <ItemGroup>
     <AdditionalFiles Include="..\stylecop.json">
       <Link>stylecop.json</Link>
     </AdditionalFiles>
