@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Xunit;
 
 namespace NetDuid.Tests
@@ -8,8 +7,10 @@ namespace NetDuid.Tests
     {
         #region TryParse(string, Duid)
 
-        public static IEnumerable<object[]> Parse_String_Success_Test_TestCases()
+        public static TheoryData<byte[], string> Parse_String_Success_Test_TestCases()
         {
+            var theoryData = new TheoryData<byte[], string>();
+
             // legal delimiters
             var delimiters = new string[] { ":", "-", " ", string.Empty };
 
@@ -22,29 +23,28 @@ namespace NetDuid.Tests
                 {
                     // upper case version
                     var upperCase = duidBytes.BytesAsString(delimiter);
-                    yield return TestCase(duidBytes, upperCase);
+                    AddTestCase(duidBytes, upperCase);
 
                     // lower case version
                     var lowerCase = upperCase.ToLowerInvariant();
-                    yield return TestCase(duidBytes, lowerCase);
+                    AddTestCase(duidBytes, lowerCase);
 
                     if (delimiter != string.Empty)
                     {
                         // delimited strings do not require a leading 0
                         var delimitedUpperCase = duidBytes.BytesAsStringNoLeadingZero(delimiter);
 
-                        yield return TestCase(duidBytes, delimitedUpperCase);
-                        yield return TestCase(duidBytes, delimitedUpperCase.ToLowerInvariant());
+                        AddTestCase(duidBytes, delimitedUpperCase);
+                        AddTestCase(duidBytes, delimitedUpperCase.ToLowerInvariant());
                     }
                 }
             }
 
-#if NET6_0_OR_GREATER
-            static
-#endif
-            object[] TestCase(byte[] expectedBytes, string inputString)
+            return theoryData;
+
+            void AddTestCase(byte[] expectedBytes, string inputString)
             {
-                return new object[] { expectedBytes, inputString };
+                theoryData.Add(expectedBytes, inputString);
             }
         }
 
@@ -64,24 +64,25 @@ namespace NetDuid.Tests
             Assert.Equal(expectedBytes, duid.GetBytes());
         }
 
-        public static IEnumerable<object[]> Parse_String_Invalid_Test_TestCases()
+        public static TheoryData<string> Parse_String_Invalid_Test_TestCases()
         {
-            yield return TestCase(null);
-            yield return TestCase(string.Empty);
-            yield return TestCase("potato");
+            var theoryData = new TheoryData<string>();
+
+            AddTestCase(null);
+            AddTestCase(string.Empty);
+            AddTestCase("potato");
 
             // invalid lengths
             foreach (var byteLength in new[] { 1, 2, 131, 200 })
             {
-                yield return TestCase(StaticTestData.GenerateBytes(byteLength).BytesAsString());
+                AddTestCase(StaticTestData.GenerateBytes(byteLength).BytesAsString());
             }
 
-#if NET6_0_OR_GREATER
-            static
-#endif
-            object[] TestCase(string invalidDuidString)
+            return theoryData;
+
+            void AddTestCase(string invalidDuidString)
             {
-                return new object[] { invalidDuidString };
+                theoryData.Add(invalidDuidString);
             }
         }
 
@@ -97,37 +98,6 @@ namespace NetDuid.Tests
             Assert.False(success, "unexpectedly succeeded");
             Assert.Null(duid);
         }
-
-#if NET7_0_OR_GREATER
-        [Theory]
-        [MemberData(nameof(Parse_String_Success_Test_TestCases))]
-        public void TryParse_String_IFormatProvider_Success_Test(byte[] expectedBytes, string inputString)
-        {
-            // Arrange
-            // Act
-            var success = Duid.TryParse(inputString, null, out var duid);
-
-            // Assert
-            Assert.True(success, "parse failed");
-            Assert.NotNull(duid);
-
-            Assert.IsType<Duid>(duid);
-            Assert.Equal(expectedBytes, duid.GetBytes());
-        }
-
-        [Theory]
-        [MemberData(nameof(Parse_String_Invalid_Test_TestCases))]
-        public void Try_Parse_String_IFormatProvider_Invalid_Test(string inputString)
-        {
-            // Arrange
-            // Act
-            var success = Duid.TryParse(inputString, null, out var duid);
-
-            // Assert
-            Assert.False(success, "unexpectedly succeeded");
-            Assert.Null(duid);
-        }
-#endif
 
         #endregion
 
@@ -157,7 +127,6 @@ namespace NetDuid.Tests
             Assert.Throws<ArgumentException>(() => Duid.Parse(inputString));
         }
 
-#if NET7_0_OR_GREATER
         [Theory]
         [MemberData(nameof(Parse_String_Success_Test_TestCases))]
         public void Parse_Success_IFormatProvider_String_Test(byte[] expectedBytes, string inputString)
@@ -182,7 +151,7 @@ namespace NetDuid.Tests
             // Assert
             Assert.Throws<ArgumentException>(() => Duid.Parse(inputString, null));
         }
-#endif
+
         #endregion
     }
 }

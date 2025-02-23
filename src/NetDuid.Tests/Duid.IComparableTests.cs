@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using Xunit;
 
 namespace NetDuid.Tests
@@ -9,46 +7,40 @@ namespace NetDuid.Tests
     {
         #region Compare(Duid)
 
-        public static IEnumerable<object[]> Compare_Duid_Test_TestCases()
+        public static TheoryData<int, Duid, Duid> Compare_Duid_Test_TestCases()
         {
+            var theoryData = new TheoryData<int, Duid, Duid>();
+
             var referenceDuid = new Duid(new byte[] { 0x00, 0x00, 0xff });
-            yield return TestCase(0, referenceDuid, referenceDuid); // by reference
-            yield return TestCase(-1, referenceDuid, null); // null case
 
-            object[] TestCase(int expectedSign, Duid thisDuid, Duid otherDuid)
+            AddTestCase(0, referenceDuid, referenceDuid); // by reference
+            AddTestCase(-1, referenceDuid, null); // null case
+
+            // equality
+            AddCommutativeTestCases(0, new byte[] { 0x00, 0x00, 0x00 }, new byte[] { 0x00, 0x00, 0x00 });
+            AddCommutativeTestCases(0, new byte[] { 0xFF, 0x00, 0x80 }, new byte[] { 0xFF, 0x00, 0x80 });
+
+            // by length
+            AddCommutativeTestCases(-1, new byte[3], new byte[4]);
+            AddCommutativeTestCases(-1, new byte[3], new byte[130]);
+
+            // by length, then big endian value
+            AddCommutativeTestCases(-1, new byte[] { 0xFF, 0x00, 0x00 }, new byte[] { 0xFF, 0xFF, 0xFF, 0xFF });
+            AddCommutativeTestCases(-1, new byte[] { 0xFF, 0xFF, 0xFF }, new byte[] { 0xFF, 0x00, 0x00, 0x00 });
+            AddCommutativeTestCases(-1, new byte[] { 0x00, 0x00, 0x00 }, new byte[] { 0x00, 0x00, 0x01 });
+            AddCommutativeTestCases(-1, new byte[] { 0x00, 0x00, 0x00 }, new byte[] { 0x80, 0x00, 0x00 });
+
+            return theoryData;
+
+            void AddTestCase(int expectedSign, Duid thisDuid, Duid otherDuid)
             {
-                return new object[] { expectedSign, thisDuid, otherDuid };
+                theoryData.Add(expectedSign, thisDuid, otherDuid);
             }
 
-            var deepTestCases = new List<IEnumerable<object[]>>
+            void AddCommutativeTestCases(int expectedSign, byte[] thisBytes, byte[] otherBytes)
             {
-                // equality
-                TestCases(0, new byte[] { 0x00, 0x00, 0x00 }, new byte[] { 0x00, 0x00, 0x00 }),
-                TestCases(0, new byte[] { 0xFF, 0x00, 0x80 }, new byte[] { 0xFF, 0x00, 0x80 }),
-                // by length
-                TestCases(-1, new byte[3], new byte[4]),
-                TestCases(-1, new byte[3], new byte[130]),
-                // by length, then big endian value
-                TestCases(-1, new byte[] { 0xFF, 0x00, 0x00 }, new byte[] { 0xFF, 0xFF, 0xFF, 0xFF }),
-                TestCases(-1, new byte[] { 0xFF, 0xFF, 0xFF }, new byte[] { 0xFF, 0x00, 0x00, 0x00 }),
-                TestCases(-1, new byte[] { 0x00, 0x00, 0x00 }, new byte[] { 0x00, 0x00, 0x01 }),
-                TestCases(-1, new byte[] { 0x00, 0x00, 0x00 }, new byte[] { 0x80, 0x00, 0x00 }),
-            }.SelectMany(tc => tc);
-
-            foreach (var testCase in deepTestCases)
-            {
-                yield return testCase;
-            }
-
-            IEnumerable<object[]> TestCases(int expectedSign, byte[] thisBytes, byte[] otherBytes)
-            {
-                yield return TestCase(expectedSign, new Duid(thisBytes), new Duid(otherBytes));
-
-                if (expectedSign != 0)
-                {
-                    // create transitive test case
-                    yield return TestCase(expectedSign * -1, new Duid(otherBytes), new Duid(thisBytes));
-                }
+                AddTestCase(expectedSign, new Duid(thisBytes), new Duid(otherBytes));
+                AddTestCase(expectedSign * -1, new Duid(otherBytes), new Duid(thisBytes)); // Commutative test case form
             }
         }
 

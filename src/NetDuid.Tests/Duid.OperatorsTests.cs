@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Xunit;
+﻿using Xunit;
 
 namespace NetDuid.Tests
 {
@@ -41,33 +40,35 @@ namespace NetDuid.Tests
 
         #region Comparison Operators
 
-        public static IEnumerable<object[]> Operators_Duid_Test_TestCases()
+        public static TheoryData<int, Duid, Duid> Operators_Duid_Test_TestCases()
         {
+            var theoryData = new TheoryData<int, Duid, Duid>();
+
             var zeroArray = new byte[] { 0x00, 0x00, 0x00 };
 
             var nonNullDuid = new Duid(zeroArray);
 
-            yield return TestCase(0, nonNullDuid, nonNullDuid); // reference equal
-            yield return TestCase(0, nonNullDuid, new Duid(zeroArray)); // non-reference equal
-            yield return TestCase(0, null, null); // both null equal
+            TestCase(0, nonNullDuid, nonNullDuid); // reference equal
+            TestCase(0, nonNullDuid, new Duid(zeroArray)); // non-reference equal
+            TestCase(0, null, null); // both null equal
 
             // single null operand (null less than non-null)
-            yield return TestCase(1, nonNullDuid, null);
-            yield return TestCase(-1, null, nonNullDuid);
+            TestCase(1, nonNullDuid, null);
+            TestCase(-1, null, nonNullDuid);
 
             // non-null operands (in theory based on CompareTo)
-            var otherDuid = new Duid(new byte[] { 0xFF, 0x00, 0x80 });
+            var otherDuidBytes = new byte[] { 0xFF, 0x00, 0x80 };
+            var otherDuid = new Duid(otherDuidBytes);
 
-            yield return TestCase(nonNullDuid.CompareTo(otherDuid), nonNullDuid, otherDuid);
-            yield return TestCase(otherDuid.CompareTo(nonNullDuid), otherDuid, nonNullDuid);
-            yield return TestCase(otherDuid.CompareTo(otherDuid), otherDuid, otherDuid);
+            TestCase(nonNullDuid.CompareTo(otherDuid), nonNullDuid, otherDuid);
+            TestCase(otherDuid.CompareTo(nonNullDuid), otherDuid, nonNullDuid);
+            TestCase(otherDuid.CompareTo(otherDuid), otherDuid, otherDuid);
 
-#if NET6_0_OR_GREATER
-            static
-#endif
-            object[] TestCase(int magnitude, Duid lhs, Duid rhs)
+            return theoryData;
+
+            void TestCase(int magnitude, Duid lhs, Duid rhs)
             {
-                return new object[] { magnitude, lhs, rhs };
+                theoryData.Add(magnitude, lhs, rhs);
             }
         }
 

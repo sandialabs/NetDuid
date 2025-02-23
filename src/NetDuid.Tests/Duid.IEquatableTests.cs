@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Xunit;
+﻿using Xunit;
 
 namespace NetDuid.Tests
 {
@@ -8,44 +6,38 @@ namespace NetDuid.Tests
     {
         #region Equal(Duid)
 
-        public static IEnumerable<object[]> Equal_Duid_Test_TestCases()
+        public static TheoryData<bool, Duid, Duid> Equal_Duid_Test_TestCases()
         {
+            var theoryData = new TheoryData<bool, Duid, Duid>();
+
+            // reference equality
             var referenceDuid = new Duid(new byte[] { 0x00, 0x00, 0xff });
-            yield return TestCase(true, referenceDuid, referenceDuid); // by reference
-            yield return TestCase(false, referenceDuid, null); // null case
+            AddTestCase(true, referenceDuid, referenceDuid); // by reference
+            AddTestCase(false, referenceDuid, null); // null case
 
-            object[] TestCase(bool expectedEqual, Duid thisDuid, Duid otherDuid)
+            // equality
+            AddCommutativeTestCases(true, new byte[] { 0x00, 0x00, 0x00 }, new byte[] { 0x00, 0x00, 0x00 });
+            AddCommutativeTestCases(true, new byte[] { 0xFF, 0x00, 0x80 }, new byte[] { 0xFF, 0x00, 0x80 });
+
+            // inequality
+            AddCommutativeTestCases(false, new byte[3], new byte[4]);
+            AddCommutativeTestCases(false, new byte[3], new byte[130]);
+            AddCommutativeTestCases(false, new byte[] { 0xFF, 0x00, 0x00 }, new byte[] { 0xFF, 0xFF, 0xFF, 0xFF });
+            AddCommutativeTestCases(false, new byte[] { 0xFF, 0xFF, 0xFF }, new byte[] { 0xFF, 0x00, 0x00, 0x00 });
+            AddCommutativeTestCases(false, new byte[] { 0x00, 0x00, 0x00 }, new byte[] { 0x00, 0x00, 0x01 });
+            AddCommutativeTestCases(false, new byte[] { 0x00, 0x00, 0x00 }, new byte[] { 0x80, 0x00, 0x00 });
+
+            return theoryData;
+
+            void AddTestCase(bool expectedEqual, Duid thisDuid, Duid otherDuid)
             {
-                return new object[] { expectedEqual, thisDuid, otherDuid };
+                theoryData.Add(expectedEqual, thisDuid, otherDuid);
             }
 
-            var deepTestCases = new List<IEnumerable<object[]>>
+            void AddCommutativeTestCases(bool expectedEqual, byte[] thisBytes, byte[] otherBytes)
             {
-                // equality
-                TestCases(true, new byte[] { 0x00, 0x00, 0x00 }, new byte[] { 0x00, 0x00, 0x00 }),
-                TestCases(true, new byte[] { 0xFF, 0x00, 0x80 }, new byte[] { 0xFF, 0x00, 0x80 }),
-                TestCases(false, new byte[3], new byte[4]),
-                TestCases(false, new byte[3], new byte[130]),
-                TestCases(false, new byte[] { 0xFF, 0x00, 0x00 }, new byte[] { 0xFF, 0xFF, 0xFF, 0xFF }),
-                TestCases(false, new byte[] { 0xFF, 0xFF, 0xFF }, new byte[] { 0xFF, 0x00, 0x00, 0x00 }),
-                TestCases(false, new byte[] { 0x00, 0x00, 0x00 }, new byte[] { 0x00, 0x00, 0x01 }),
-                TestCases(false, new byte[] { 0x00, 0x00, 0x00 }, new byte[] { 0x80, 0x00, 0x00 }),
-            }.SelectMany(tc => tc);
-
-            foreach (var testCase in deepTestCases)
-            {
-                yield return testCase;
-            }
-
-            IEnumerable<object[]> TestCases(bool expectedEqual, byte[] thisBytes, byte[] otherBytes)
-            {
-                yield return TestCase(expectedEqual, new Duid(thisBytes), new Duid(otherBytes));
-
-                if (!expectedEqual)
-                {
-                    // create transitive test case
-                    yield return TestCase(expectedEqual, new Duid(otherBytes), new Duid(thisBytes));
-                }
+                AddTestCase(expectedEqual, new Duid(thisBytes), new Duid(otherBytes));
+                AddTestCase(expectedEqual, new Duid(otherBytes), new Duid(thisBytes)); // Commutative test case form
             }
         }
 
@@ -68,7 +60,7 @@ namespace NetDuid.Tests
 
         [Theory]
         [MemberData(nameof(Equal_Duid_Test_TestCases))]
-        public void Equal_Object_Test(bool expectedEqual, Duid thisDuid, object otherDuid)
+        public void Equal_Object_Test(bool expectedEqual, Duid thisDuid, Duid otherDuid)
         {
             // Arrange
             // Act
@@ -97,12 +89,16 @@ namespace NetDuid.Tests
         #endregion
 
         #region GetHashCode
-        public static IEnumerable<object[]> HashCode_Test_TestCases()
+        public static TheoryData<byte[]> HashCode_Test_TestCases()
         {
+            var theoryData = new TheoryData<byte[]>();
+
             for (var byteCount = 3; byteCount <= 130; byteCount += 5)
             {
-                yield return new object[] { StaticTestData.GenerateBytes(byteCount, byteCount) };
+                theoryData.Add(StaticTestData.GenerateBytes(byteCount, byteCount));
             }
+
+            return theoryData;
         }
 
         [Theory]

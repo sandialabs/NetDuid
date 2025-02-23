@@ -1,7 +1,5 @@
-﻿#if NET48
-using System.Collections.Generic;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Soap;
+﻿using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 using Xunit;
 
 namespace NetDuid.Tests
@@ -10,13 +8,19 @@ namespace NetDuid.Tests
     {
         #region ISerializable
 
-        public static IEnumerable<object[]> Serializable_Test_TestCases()
+        public static TheoryData<Duid> Serializable_Test_TestCases()
         {
+            var theoryData = new TheoryData<Duid>();
+
             for (var byteCount = 3; byteCount <= 130; byteCount++)
             {
                 var bytes = StaticTestData.GenerateBytes(byteCount, byteCount);
-                yield return new object[] { new Duid(bytes) };
+                var duid = new Duid(bytes);
+
+                theoryData.Add(duid);
             }
+
+            return theoryData;
         }
 
         [Theory]
@@ -24,20 +28,27 @@ namespace NetDuid.Tests
         public void Serializable_Test(Duid duid)
         {
             // Arrange
-            var stream = new MemoryStream();
-            var formatter = new SoapFormatter(); // Soap isn't important, only the ability to find and use a reasonable formatter
+            using (var stream = new MemoryStream())
+            {
+#if !NET48
+#pragma warning disable SYSLIB0011
+#endif
+                var formatter = new BinaryFormatter();
 
-            // Act
-            formatter.Serialize(stream, duid); // serialize
-            stream.Seek(0, SeekOrigin.Begin);
-            var result = formatter.Deserialize(stream) as Duid; // deserialize
+                // Act
+                formatter.Serialize(stream, duid); // serialize
+                stream.Seek(0, SeekOrigin.Begin);
+                var result = formatter.Deserialize(stream) as Duid; // deserialize
+#if !NET48
+#pragma warning restore SYSLIB0011
+#endif
 
-            // Assert
-            Assert.NotNull(result);
-            Assert.Equal(duid, result);
+                // Assert
+                Assert.NotNull(result);
+                Assert.Equal(duid, result);
+            }
         }
 
         #endregion
     }
 }
-#endif
