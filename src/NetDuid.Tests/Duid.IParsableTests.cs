@@ -1,5 +1,4 @@
-﻿using System;
-using Xunit;
+﻿using Xunit;
 
 namespace NetDuid.Tests
 {
@@ -7,9 +6,9 @@ namespace NetDuid.Tests
     {
         #region IParsable<Duid>
 
-        public static TheoryData<byte[], IFormatProvider, string> TryParse_String_IFormatProvider_Success_Test_TestCases()
+        public static TheoryData<byte[], string> TryParse_String_IFormatProvider_Success_Test_TestCases()
         {
-            var theoryData = new TheoryData<byte[], IFormatProvider, string>();
+            var theoryData = new TheoryData<byte[], string>();
 
             // legal delimiters
             var delimiters = new string[] { ":", "-", " ", string.Empty };
@@ -44,21 +43,17 @@ namespace NetDuid.Tests
 
             void AddTestCase(byte[] expectedBytes, string inputString)
             {
-                theoryData.Add(expectedBytes, null, inputString);
+                theoryData.Add(expectedBytes, inputString);
             }
         }
 
         [Theory]
         [MemberData(nameof(TryParse_String_IFormatProvider_Success_Test_TestCases))]
-        public void TryParse_String_IFormatProvider_Success_Test(
-            byte[] expectedBytes,
-            IFormatProvider formattable,
-            string inputString
-        )
+        public void TryParse_String_IFormatProvider_Success_Test(byte[] expectedBytes, string inputString)
         {
             // Arrange
             // Act
-            var success = Duid.TryParse(inputString, formattable, out var duid);
+            var success = Duid.TryParse(inputString, null, out var duid);
 
             // Assert
             Assert.True(success, "parse failed");
@@ -68,9 +63,9 @@ namespace NetDuid.Tests
             Assert.Equal(expectedBytes, duid.GetBytes());
         }
 
-        public static TheoryData<string, IFormatProvider> Try_Parse_String_IFormatProvider_Invalid_Test_TestCases()
+        public static TheoryData<string> Try_Parse_String_IFormatProvider_Invalid_Test_TestCases()
         {
-            var theoryData = new TheoryData<string, IFormatProvider>();
+            var theoryData = new TheoryData<string>();
 
             AddTestCase(null);
             AddTestCase(string.Empty);
@@ -86,17 +81,17 @@ namespace NetDuid.Tests
 
             void AddTestCase(string invalidDuidString)
             {
-                theoryData.Add(invalidDuidString, null);
+                theoryData.Add(invalidDuidString);
             }
         }
 
         [Theory]
         [MemberData(nameof(Try_Parse_String_IFormatProvider_Invalid_Test_TestCases))]
-        public void Try_Parse_String_IFormatProvider_Invalid_Test(string inputString, IFormatProvider formatProvider)
+        public void Try_Parse_String_IFormatProvider_Invalid_Test(string inputString)
         {
             // Arrange
             // Act
-            var success = Duid.TryParse(inputString, formatProvider, out var duid);
+            var success = Duid.TryParse(inputString, null, out var duid);
 
             // Assert
             Assert.False(success, "unexpectedly succeeded");

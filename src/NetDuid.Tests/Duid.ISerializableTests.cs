@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿#if !NET9_0_OR_GREATER
+using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using Xunit;
 
@@ -52,3 +53,4 @@ namespace NetDuid.Tests
         #endregion
     }
 }
+#endif
