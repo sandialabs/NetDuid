@@ -1,6 +1,12 @@
 ﻿using System;
 using System.Runtime.Serialization;
+using NetDuid;
+using NetDuid.Tests.XunitSerializers;
 using Xunit;
+using Xunit.Sdk;
+
+// register custom IXunitSerializer to assembly for Duid
+[assembly: RegisterXunitSerializer(typeof(DuidXunitSerializer), typeof(Duid))]
 
 namespace NetDuid.Tests
 {
