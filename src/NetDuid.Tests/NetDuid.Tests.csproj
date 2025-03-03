@@ -48,7 +48,7 @@
       <DependentUpon>DuidTests.cs</DependentUpon>
     </Compile>
   </ItemGroup>
-  
+
   <ItemGroup>
     <AdditionalFiles Include="..\stylecop.json">
       <Link>stylecop.json</Link>
@@ -87,10 +87,6 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Roslynator.Testing.CSharp.Xunit" Version="4.13.1">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="SonarAnalyzer.CSharp" Version="10.7.0.110445">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
