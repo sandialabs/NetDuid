@@ -47,18 +47,43 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <AdditionalFiles Include="..\stylecop.json">
-      <Link>stylecop.json</Link>
-    </AdditionalFiles>
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="..\..\README.md">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <!-- Nest Duid.*.cs under Duid.cs -->
+    <Compile Update="Duid.IComparable.cs">
+      <DependentUpon>Duid.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Duid.IEquatable.cs">
+      <DependentUpon>Duid.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Duid.IFormattable.cs">
+      <DependentUpon>Duid.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Duid.IParsable.cs">
+      <DependentUpon>Duid.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Duid.ISerializable.cs">
+      <DependentUpon>Duid.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Duid.Factory.cs">
+      <DependentUpon>Duid.cs</DependentUpon>
+    </Compile>    
+    <Compile Update="Duid.Operators.cs">
+      <DependentUpon>Duid.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="..\stylecop.json">
+      <Link>stylecop.json</Link>
+    </AdditionalFiles>
+  </ItemGroup>
+  
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
     <PackageReference Include="Microsoft.Bcl.HashCode" Version="6.0.0" />
   </ItemGroup>
@@ -71,15 +96,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Roslynator.Analyzers" Version="4.13.0">
+    <PackageReference Include="Roslynator.Analyzers" Version="4.13.1">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Roslynator.CodeAnalysis.Analyzers" Version="4.13.0">
+    <PackageReference Include="Roslynator.CodeAnalysis.Analyzers" Version="4.13.1">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Roslynator.Formatting.Analyzers" Version="4.13.0">
+    <PackageReference Include="Roslynator.Formatting.Analyzers" Version="4.13.1">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
