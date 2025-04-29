@@ -1,12 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFrameworks>net48;net6.0;net7.0;net8.0;net9.0</TargetFrameworks>
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
     <OutputType>Exe</OutputType>
   </PropertyGroup>
-
   <PropertyGroup>
     <OutputPath>bin\</OutputPath>
     <DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
@@ -16,14 +14,12 @@
     <Authors>The Production Tools Team</Authors>
     <Copyright>Copyright 2025 National Technology &amp;amp; Engineering Solutions of Sandia, LLC (NTESS). Under the terms of Contract DE-NA0003525 with NTESS, the U.S. Government retains certain rights in this software.</Copyright>
   </PropertyGroup>
-
   <PropertyGroup>
     <!-- Allowing usage of unsafe binary formatting for the sake of Duid.ISerializableTests.cs; Allowing as this due for the sake of testing, using ISerializable should likley be avoided -->
     <EnableUnsafeBinaryFormatterSerialization>true</EnableUnsafeBinaryFormatterSerialization>
     <!-- Ignoring end of life targets as we want to be sure that targets still pass tests -->
     <CheckEolTargetFramework>false</CheckEolTargetFramework>
   </PropertyGroup>
-
   <ItemGroup>
     <!-- Nest Duid.*Tests.cs under DuidTests.cs -->
     <Compile Update="Duid.IComparableTests.cs">
@@ -48,31 +44,26 @@
       <DependentUpon>DuidTests.cs</DependentUpon>
     </Compile>
   </ItemGroup>
-
   <ItemGroup>
     <AdditionalFiles Include="..\stylecop.json">
       <Link>stylecop.json</Link>
     </AdditionalFiles>
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\NetDuid\NetDuid.csproj" />
   </ItemGroup>
-
   <ItemGroup Condition="'$(TargetFramework)' == 'net48'">
     <Reference Include="System.Runtime.Serialization.Formatters.Soap" />
   </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
     <PackageReference Include="coverlet.collector" Version="6.0.4" />
-    <PackageReference Include="xunit.v3" Version="2.0.0" />
+    <PackageReference Include="xunit.v3" Version="2.0.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="3.0.2">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
   </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="Roslynator.Analyzers" Version="4.13.1">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -95,5 +86,4 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
   </ItemGroup>
-
 </Project>
