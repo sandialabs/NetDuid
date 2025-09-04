@@ -16,6 +16,8 @@ on:
 jobs:
   build:
     runs-on: windows-latest
+    env:
+      HUSKY: 0  # don't run husky.net hooks
 
     steps:
       - name: Checkout code
