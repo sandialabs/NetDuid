@@ -4,7 +4,7 @@
 [![NuGet Version](https://img.shields.io/nuget/v/NetDuid)](https://www.nuget.org/packages/NetDuid)
 [![GitHub Release](https://img.shields.io/github/v/release/sandialabs/NetDuid)](https://github.com/sandialabs/NetDuid/releases)
 [![GitHub Tag](https://img.shields.io/github/v/tag/sandialabs/NetDuid)](https://github.com/sandialabs/NetDuid/tags)
-![Targets](https://img.shields.io/badge/.NET%20Standard%202.0%20|%20.NET%206.0%20|%20.NET%207.0%20|%20.NET%208.0%20|%20.NET%209.0-blue)
+![Targets](https://img.shields.io/badge/.NET%20Standard%202.0%20|%20.NET%208.0%20|%20.NET%209.0|%20.NET%2010.0-blue)
 [![Apache 2.0 License](https://img.shields.io/github/license/sandialabs/NetDuid?logo=apache)](https://github.com/sandialabs/NetDuid/blob/main/LICENSE)
 
 ## About the Project
@@ -40,7 +40,7 @@ This library is intended for use in various scenarios, including but not limited
 
 You are most likely to be interacting with the `NetDuid.Duid` type.
 
-The `Duid` type implements `IEquatable<Duid>`, `IComparable<Duid>`, `IFormattable`, `ISerializable`, and for .NET 7 and greater `IParsable<Duid>`.
+The `Duid` type implements `IEquatable<Duid>`, `IComparable<Duid>`, `IFormattable`, `ISerializable`, and for .NET 8 and greater `IParsable<Duid>`.
 
 The library "knows" RFC 8415 ("Link-layer address plus time", "Vendor-assigned unique ID based on Enterprise Number", and "Link-layer address") and RFC 6355 ("Universally Unique Identifier (UUID)") DUIDs, but can treat any valid `byte` array (a minimum of 3 bytes, and maximum of 130 bytes per the RFCs) as a DUID. An unhandled DUID type will be treated as an "Undefined" type, but otherwise functionality is identical.
 
@@ -145,7 +145,7 @@ This project uses [Semantic Versioning](https://semver.org/)
 
 ### Targeting
 
-The project targets [.NET Standard 2.0](https://learn.microsoft.com/en-us/dotnet/standard/net-standard?tabs=net-standard-2-0), [.NET 6](https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-6), [.NET 7](https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-7), [.NET 8](https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-8), and [.NET 9](https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-9/overview). The test project similarly targets .NET 6, .NET 7, .NET 8, .NET 9, but targets [.NET Framework 4.8](https://dotnet.microsoft.com/en-us/download/dotnet-framework/net48) for the .NET Standard 2.0 tests.
+The project targets [.NET Standard 2.0](https://learn.microsoft.com/en-us/dotnet/standard/net-standard?tabs=net-standard-2-0), [.NET 8](https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-8), [.NET 9](https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-9/overview), and [.NET 10](https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-10/overview). The test project similarly targets .NET 8, .NET 9, .NET 10, but targets [.NET Framework 4.8](https://dotnet.microsoft.com/en-us/download/dotnet-framework/net48) for the .NET Standard 2.0 tests.
 
 ### Commit Hook
 
