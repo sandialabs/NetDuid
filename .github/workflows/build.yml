@@ -28,10 +28,9 @@ jobs:
         with:
           # .net 4.8.x is included by default in windows-latest
           dotnet-version: |
-            6.0.x
-            7.0.x
             8.0.x
             9.0.x
+            10.0.x
 
       - name: Restore .NET tools
         run: dotnet tool restore
