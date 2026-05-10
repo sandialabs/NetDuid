@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 
 namespace NetDuid
 {
@@ -23,6 +24,7 @@ namespace NetDuid
                     ?? throw new SerializationException("unrecognized input byte array");
                 _duidBytes = ConstructWithBytesGuard(bytes);
                 Type = GetDuidType();
+                _lazyHashCode = new Lazy<int>(ComputeHashCode);
                 return;
             }
 

@@ -38,6 +38,38 @@ namespace NetDuid.Tests
 
         #endregion
 
+        #region Null Equality
+
+        [Fact]
+        public void Equality_Operator_BothNull_ReturnsTrue_Test()
+        {
+            // Arrange
+            Duid lhs = null;
+            Duid rhs = null;
+
+            // Act
+            var result = lhs == rhs;
+
+            // Assert
+            Assert.True(result);
+        }
+
+        [Fact]
+        public void Inequality_Operator_BothNull_ReturnsFalse_Test()
+        {
+            // Arrange
+            Duid lhs = null;
+            Duid rhs = null;
+
+            // Act
+            var result = lhs != rhs;
+
+            // Assert
+            Assert.False(result);
+        }
+
+        #endregion
+
         #region Comparison Operators
 
         public static TheoryData<int, Duid, Duid> Operators_Duid_Test_TestCases()

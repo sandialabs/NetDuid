@@ -20,7 +20,7 @@ namespace NetDuid
 
             if (other is null)
             {
-                return -1;
+                return 1;
             }
 
             var thisLength = _duidBytes.Length;
@@ -60,7 +60,7 @@ namespace NetDuid
 
             if (obj is null)
             {
-                return -1;
+                return 1;
             }
 
             if (obj is Duid duid)

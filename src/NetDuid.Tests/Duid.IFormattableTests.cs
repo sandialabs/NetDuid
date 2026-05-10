@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using System;
+using Xunit;
 
 namespace NetDuid.Tests
 {
@@ -79,6 +80,53 @@ namespace NetDuid.Tests
 
             // Assert
             Assert.Equal(expectedString, result);
+        }
+
+        #endregion
+
+        #region ToString(string, IFormatProvider) — invalid format
+
+        public static TheoryData<string> ToString_InvalidFormat_ThrowsFormatException_Test_TestCases()
+        {
+            var theoryData = new TheoryData<string>();
+
+            // format string too long (> 2 characters)
+            theoryData.Add("ABC");
+            theoryData.Add("U:X");
+            theoryData.Add("UU:");
+
+            // single character — not in the valid set (U, u, L, l, :, -)
+            theoryData.Add("X");
+            theoryData.Add("A");
+            theoryData.Add("1");
+            theoryData.Add("?");
+
+            // two characters — first character not U, u, L, or l
+            theoryData.Add("X:");
+            theoryData.Add("1-");
+            theoryData.Add("AU");
+
+            // two characters — second character not ':' or '-'
+            // note: space is a valid parse delimiter but not a valid format delimiter
+            theoryData.Add("UX");
+            theoryData.Add("LA");
+            theoryData.Add("U1");
+            theoryData.Add("L ");
+            theoryData.Add("U.");
+
+            return theoryData;
+        }
+
+        [Theory]
+        [MemberData(nameof(ToString_InvalidFormat_ThrowsFormatException_Test_TestCases))]
+        public void ToString_InvalidFormat_ThrowsFormatException_Test(string invalidFormat)
+        {
+            // Arrange
+            var duid = new Duid(new byte[] { 0xAB, 0xCD, 0xEF });
+
+            // Act
+            // Assert
+            Assert.Throws<FormatException>(() => duid.ToString(invalidFormat, null));
         }
 
         #endregion

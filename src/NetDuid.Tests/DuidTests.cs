@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 using NetDuid;
 using NetDuid.Tests.XunitSerializers;
@@ -186,6 +187,64 @@ namespace NetDuid.Tests
 
             // Assert
             Assert.Equal(expectedString, result);
+        }
+
+        #endregion
+
+        #region GetBytes
+
+        public static TheoryData<byte[]> GetBytes_Test_TestCases()
+        {
+            var theoryData = new TheoryData<byte[]>();
+
+            for (var byteCount = 3; byteCount <= 130; byteCount += 5)
+            {
+                theoryData.Add(StaticTestData.GenerateBytes(byteCount, byteCount));
+            }
+
+            return theoryData;
+        }
+
+        [Theory]
+        [MemberData(nameof(GetBytes_Test_TestCases))]
+        public void GetBytes_ReturnsIReadOnlyCollection_Test(byte[] inputBytes)
+        {
+            // Arrange
+            var duid = new Duid(inputBytes);
+
+            // Act
+            var result = duid.GetBytes();
+
+            // Assert
+            Assert.IsAssignableFrom<IReadOnlyCollection<byte>>(result);
+            Assert.Equal(inputBytes.Length, result.Count);
+        }
+
+        [Theory]
+        [MemberData(nameof(GetBytes_Test_TestCases))]
+        public void GetBytes_ReturnsCorrectBytes_Test(byte[] inputBytes)
+        {
+            // Arrange
+            var duid = new Duid(inputBytes);
+
+            // Act
+            var result = duid.GetBytes();
+
+            // Assert
+            Assert.Equal(inputBytes, result);
+        }
+
+        [Fact]
+        public void GetBytes_ReturnsReadOnlyView_Test()
+        {
+            // Arrange
+            var duid = new Duid(new byte[] { 0x00, 0x01, 0x02 });
+
+            // Act
+            var result = duid.GetBytes();
+
+            // Assert
+            Assert.IsNotType<byte[]>(result);
         }
 
         #endregion
