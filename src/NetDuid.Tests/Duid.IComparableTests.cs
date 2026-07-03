@@ -14,7 +14,7 @@ namespace NetDuid.Tests
             var referenceDuid = new Duid(new byte[] { 0x00, 0x00, 0xff });
 
             AddTestCase(0, referenceDuid, referenceDuid); // by reference
-            AddTestCase(-1, referenceDuid, null); // null case
+            AddTestCase(1, referenceDuid, null); // null case — non-null is greater than null per IComparable contract
 
             // equality
             AddCommutativeTestCases(0, new byte[] { 0x00, 0x00, 0x00 }, new byte[] { 0x00, 0x00, 0x00 });

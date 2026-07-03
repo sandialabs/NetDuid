@@ -135,7 +135,7 @@ namespace NetDuid
         /// <returns>a collection of big-endian bytes</returns>
         public IReadOnlyCollection<byte> GetBytes()
         {
-            return _duidBytes;
+            return Array.AsReadOnly(_duidBytes);
         }
 
         /// <inheritdoc/>

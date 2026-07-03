@@ -71,11 +71,24 @@ namespace NetDuid.Tests
             AddTestCase(string.Empty);
             AddTestCase("potato");
 
+            // whitespace-only strings — IsNullOrEmpty returns false, Trim() produces "", no regex match
+            AddTestCase("   ");
+            AddTestCase("\t");
+
             // invalid lengths
             foreach (var byteLength in new[] { 1, 2, 131, 200 })
             {
                 AddTestCase(StaticTestData.GenerateBytes(byteLength).BytesAsString());
             }
+
+            // mixed delimiters — delimited regex backreference \k<separator> requires a consistent delimiter
+            AddTestCase("AB:CD-EF");
+            AddTestCase("AB-CD:EF");
+
+            // structural problems
+            AddTestCase(":AB:CD:EF");
+            AddTestCase("AB:CD:EF:");
+            AddTestCase("AB::CD:EF");
 
             return theoryData;
 

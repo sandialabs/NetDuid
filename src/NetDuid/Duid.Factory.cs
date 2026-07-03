@@ -25,16 +25,28 @@ namespace NetDuid
         /// </remarks>
         public static bool TryParse(string duidString, out Duid duid)
         {
-            try
+            duid = null;
+
+            if (string.IsNullOrEmpty(duidString))
             {
-                duid = Parse(duidString);
-                return true;
-            }
-            catch
-            {
-                duid = null;
                 return false;
             }
+
+            var trimmed = duidString.Trim();
+
+            if (DuidRegexSource.GetDelimitedOctetsRegex().IsMatch(trimmed))
+            {
+                duid = new Duid(DelimitedStringToBytes(trimmed, 1));
+                return true;
+            }
+
+            if (DuidRegexSource.GetUndelimitedOctetsRegex().IsMatch(trimmed))
+            {
+                duid = new Duid(UndelimitedStringToBytes(trimmed));
+                return true;
+            }
+
+            return false;
         }
 
         /// <summary>
