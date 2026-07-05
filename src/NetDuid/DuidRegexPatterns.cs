@@ -13,7 +13,7 @@ namespace NetDuid
 #if NET7_0_OR_GREATER
     partial
 #endif
-    class DuidRegexSource
+    class DuidRegexPatterns
     {
         /// <summary>
         ///     Regex pattern that should match a string of hexadecimal octet pairs delimited by a single dash ('-'), colon (':') or space (' ') character. Leading 0 in pair may be omitted.

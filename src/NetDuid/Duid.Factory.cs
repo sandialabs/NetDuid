@@ -34,13 +34,13 @@ namespace NetDuid
 
             var trimmed = duidString.Trim();
 
-            if (DuidRegexSource.GetDelimitedOctetsRegex().IsMatch(trimmed))
+            if (DuidRegexPatterns.GetDelimitedOctetsRegex().IsMatch(trimmed))
             {
                 duid = new Duid(DelimitedStringToBytes(trimmed, 1));
                 return true;
             }
 
-            if (DuidRegexSource.GetUndelimitedOctetsRegex().IsMatch(trimmed))
+            if (DuidRegexPatterns.GetUndelimitedOctetsRegex().IsMatch(trimmed))
             {
                 duid = new Duid(UndelimitedStringToBytes(trimmed));
                 return true;
@@ -70,11 +70,11 @@ namespace NetDuid
 
             var trimmed = duidString.Trim();
 
-            if (DuidRegexSource.GetDelimitedOctetsRegex().IsMatch(trimmed))
+            if (DuidRegexPatterns.GetDelimitedOctetsRegex().IsMatch(trimmed))
             {
                 return new Duid(DelimitedStringToBytes(trimmed, 1));
             }
-            else if (DuidRegexSource.GetUndelimitedOctetsRegex().IsMatch(trimmed))
+            else if (DuidRegexPatterns.GetUndelimitedOctetsRegex().IsMatch(trimmed))
             {
                 // convert and return non-delimited string of octets into bytes
                 return new Duid(UndelimitedStringToBytes(trimmed));
@@ -159,20 +159,23 @@ namespace NetDuid
             return result;
         }
 
+        // private static char HexCharToUpper(char input)
+        // {
+        //     if (input >= 'a' && input <= 'f')
+        //     {
+        //         return (char)(input - ' '); // Upper case is 32 characters before lower case in ASCII; it just so happens space is 32
+        //     }
+        //
+        //     return input;
+        // }
+
         /// <summary>
         /// Converts a lowercase hexadecimal character to its uppercase equivalent.
         /// </summary>
         /// <param name="input">The lowercase hexadecimal character.</param>
         /// <returns>The uppercase equivalent of the hexadecimal character.</returns>
-        private static char HexCharToUpper(char input)
-        {
-            if (input >= 'a' && input <= 'f')
-            {
-                return (char)(input - ' '); // Upper case is 32 characters before lower case in ASCII; it just so happens space is 32
-            }
-
-            return input;
-        }
+        // Improved: use char.ToUpperInvariant for clarity
+        private static char HexCharToUpper(char input) => char.ToUpperInvariant(input);
 
         /// <summary>
         /// Converts a hexadecimal character to its byte value.

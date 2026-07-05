@@ -145,8 +145,9 @@ namespace NetDuid
                 var characterIndex = i * octetLength; // Calculate the index in the result array
 
                 // Convert the byte to hexadecimal characters
-                characters[characterIndex] = nibbleFormatter(@byte / 16);
-                characters[characterIndex + 1] = nibbleFormatter(@byte % 16);
+                // Improved: bit shifts are idiomatic for nibble extraction
+                characters[characterIndex] = nibbleFormatter(@byte >> 4);
+                characters[characterIndex + 1] = nibbleFormatter(@byte & 0x0F);
 
                 // Add the delimiter if specified
                 if (delimiter != null)
