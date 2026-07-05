@@ -110,6 +110,19 @@ namespace NetDuid.Tests
             Assert.Throws<ArgumentNullException>(() => new Duid(null));
         }
 
+        [Fact]
+        public void Constructor_ListByte_CreatesValidDuid_Test()
+        {
+            // Arrange
+            var bytes = new List<byte> { 0x00, 0x01, 0xAA, 0xBB, 0xCC };
+
+            // Act
+            var duid = new Duid(bytes);
+
+            // Assert
+            Assert.Equal(bytes, duid.GetBytes());
+        }
+
         #endregion
 
         #region DuidType

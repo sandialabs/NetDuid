@@ -74,7 +74,7 @@ namespace NetDuid.Tests
         [InlineData("string")]
         [InlineData(42)]
         [InlineData(null)]
-        public void Equal_Object_NotDuid_Throws_ArgumentException_Test(object other)
+        public void Equal_Object_NotDuid_Returns_False_Test(object other)
         {
             // Arrange
             var duid = new Duid(new byte[] { 0x00, 0x00, 0xff });
@@ -112,6 +112,40 @@ namespace NetDuid.Tests
             // Act
             // Assert
             Assert.Equal(duidA.GetHashCode(), duidB.GetHashCode());
+        }
+
+        [Fact]
+        public void HashCode_SameInstance_ReturnsStableHash_Test()
+        {
+            // Arrange
+            var duid = new Duid(new byte[] { 0x00, 0x01, 0x02, 0x03 });
+
+            // Act
+            var hash1 = duid.GetHashCode();
+            var hash2 = duid.GetHashCode();
+            var hash3 = duid.GetHashCode();
+
+            // Assert
+            Assert.Equal(hash1, hash2);
+            Assert.Equal(hash2, hash3);
+        }
+
+        [Theory]
+        [InlineData(new byte[] { 0x00, 0x01, 0x02 }, new byte[] { 0x00, 0x01, 0x03 })]
+        [InlineData(new byte[] { 0x00, 0x00, 0x00 }, new byte[] { 0xFF, 0xFF, 0xFF })]
+        [InlineData(new byte[] { 0x00, 0x01, 0x02 }, new byte[] { 0x00, 0x01, 0x02, 0x03 })]
+        public void HashCode_DifferentDuids_DifferentHashes_Test(byte[] bytesA, byte[] bytesB)
+        {
+            // Arrange
+            var duidA = new Duid(bytesA);
+            var duidB = new Duid(bytesB);
+
+            // Act
+            var hashA = duidA.GetHashCode();
+            var hashB = duidB.GetHashCode();
+
+            // Assert
+            Assert.NotEqual(hashA, hashB);
         }
         #endregion
     }
