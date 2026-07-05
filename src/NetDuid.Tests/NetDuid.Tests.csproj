@@ -1,21 +1,33 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+    <Description>Unit test package for NetDuid</Description>
+    <Authors>The Production Tools Team</Authors>
+    <Company>Sandia National Laboratories</Company>
+    <Copyright>Copyright 2025 National Technology &amp; Engineering Solutions of Sandia, LLC
+      (NTESS). Under the terms of Contract DE-NA0003525 with NTESS, the U.S. Government retains
+      certain rights in this software</Copyright>
+  </PropertyGroup>
+  <PropertyGroup>
     <TargetFrameworks>net48;net8.0;net9.0;net10.0</TargetFrameworks>
+    <LangVersion>14.0</LangVersion>
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
     <OutputType>Exe</OutputType>
   </PropertyGroup>
   <PropertyGroup>
-    <OutputPath>bin\</OutputPath>
+    <OutputPath>bin/</OutputPath>
     <DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
     <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
     <Title>NetDuid Tests</Title>
     <Company>Sandia National Laboratories</Company>
     <Authors>The Production Tools Team</Authors>
-    <Copyright>Copyright 2025 National Technology &amp;amp; Engineering Solutions of Sandia, LLC (NTESS). Under the terms of Contract DE-NA0003525 with NTESS, the U.S. Government retains certain rights in this software.</Copyright>
+    <Copyright>Copyright 2025 National Technology &amp;amp; Engineering Solutions of Sandia, LLC
+      (NTESS). Under the terms of Contract DE-NA0003525 with NTESS, the U.S. Government retains
+      certain rights in this software.</Copyright>
   </PropertyGroup>
   <PropertyGroup>
-    <!-- Allowing usage of unsafe binary formatting for the sake of Duid.ISerializableTests.cs; Allowing as this due for the sake of testing, using ISerializable should likley be avoided -->
+    <!-- Allowing usage of unsafe binary formatting for the sake of Duid.ISerializableTests.cs;
+    Allowing as this due for the sake of testing, using ISerializable should likley be avoided -->
     <EnableUnsafeBinaryFormatterSerialization>true</EnableUnsafeBinaryFormatterSerialization>
     <!-- Ignoring end of life targets as we want to be sure that targets still pass tests -->
     <CheckEolTargetFramework>false</CheckEolTargetFramework>
@@ -45,7 +57,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <AdditionalFiles Include="..\stylecop.json">
+    <AdditionalFiles Include="..\..\stylecop.json">
       <Link>stylecop.json</Link>
     </AdditionalFiles>
   </ItemGroup>
@@ -53,33 +65,41 @@
     <ProjectReference Include="..\NetDuid\NetDuid.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
-    <PackageReference Include="coverlet.collector" Version="6.0.4" />
-    <PackageReference Include="System.Reflection.Metadata" Version="10.0.0" />
-    <PackageReference Include="xunit.v3" Version="3.2.0" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.5">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Condition="'$(TargetFramework)' == 'net48'" />
+    <PackageReference Include="NSubstitute" />
+    <PackageReference Include="xunit.v3" />
+    <PackageReference Include="xunit.analyzers">
       <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="xunit.runner.visualstudio">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Roslynator.Analyzers" Version="4.14.1">
+    <PackageReference Include="NSubstitute.Analyzers.CSharp">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Roslynator.Analyzers">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Roslynator.CodeAnalysis.Analyzers" Version="4.14.1">
+    <PackageReference Include="Roslynator.CodeAnalysis.Analyzers">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Roslynator.Formatting.Analyzers" Version="4.14.1">
+    <PackageReference Include="Roslynator.Formatting.Analyzers">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="SonarAnalyzer.CSharp" Version="10.15.0.120848">
+    <PackageReference Include="SonarAnalyzer.CSharp">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.556">
+    <PackageReference Include="StyleCop.Analyzers">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>

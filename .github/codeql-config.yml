@@ -1,0 +1,12 @@
+name: "NetDuid CodeQL Configuration"
+
+query-filters:
+  - exclude:
+      problem.severity:
+        - warning
+        - recommendation
+        - note
+
+paths-ignore:
+  - src/NetDuid.Tests
+  - src/NetDuid.Benchmarks
