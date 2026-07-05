@@ -1,0 +1,34 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="../CODE_OF_CONDUCT.md" />
+    <File Path="../HUMANS.md" />
+    <File Path="../LICENSE" />
+    <File Path="../README.md" />
+    <File Path="../SECURITY.md" />
+    <File Path="global.json" />
+  </Folder>
+  <Folder Name="/Solution Items/codequality/">
+    <File Path="../.editorconfig" />
+    <File Path="../dictionary.dic" />
+    <File Path=".csharpierrc.json" />
+    <File Path="stylecop.json" />
+  </Folder>
+  <Folder Name="/Solution Items/git/">
+    <File Path="../.gitattributes" />
+    <File Path="../.gitignore" />
+  </Folder>
+  <Folder Name="/Solution Items/github/">
+    <File Path="../.github/dependabot.yml" />
+  </Folder>
+  <Folder Name="/Solution Items/github/issue templates/">
+    <File Path="../.github/ISSUE_TEMPLATE/bug_report.md" />
+    <File Path="../.github/ISSUE_TEMPLATE/feature_request.md" />
+  </Folder>
+  <Folder Name="/Solution Items/github/workflow/">
+    <File Path="../.github/workflows/build.yml" />
+    <File Path="../.github/workflows/publish.yml" />
+  </Folder>
+  <Folder Name="/Solution Items/solution/" />
+  <Project Path="src/NetDuid.Tests/NetDuid.Tests.csproj" />
+  <Project Path="src/NetDuid/NetDuid.csproj" />
+</Solution>
