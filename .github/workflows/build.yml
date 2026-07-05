@@ -54,15 +54,19 @@ jobs:
         run: dotnet restore
 
       - name: Build
-        run: dotnet build --no-restore -p:VersionFromCI="0.0.0-cibuild"
+        run: dotnet build --no-restore --configuration Release -p:VersionFromCI="0.0.0-cibuild"
 
-      - name: Test (Ubuntu — net8.0)
+      - name: Test with coverage (Ubuntu — net8.0)
         if: matrix.os == 'ubuntu-latest'
-        run: dotnet test --no-build --verbosity normal --logger trx --framework net8.0
+        run: |
+          dotnet tool install --global dotnet-coverage 2>/dev/null || dotnet tool update --global dotnet-coverage
+          dotnet-coverage collect "dotnet test --no-build --verbosity normal --logger trx --framework net8.0" -f cobertura -o coverage/cobertura-net8.xml
 
-      - name: Test (Ubuntu — net9.0)
+      - name: Test with coverage (Ubuntu — net9.0)
         if: matrix.os == 'ubuntu-latest'
-        run: dotnet test --no-build --verbosity normal --logger trx --framework net9.0
+        run: |
+          dotnet tool install --global dotnet-coverage 2>/dev/null || dotnet tool update --global dotnet-coverage
+          dotnet-coverage collect "dotnet test --no-build --verbosity normal --logger trx --framework net9.0" -f cobertura -o coverage/cobertura-net9.xml
 
       - name: Test with coverage (Ubuntu — net10.0)
         if: matrix.os == 'ubuntu-latest'
