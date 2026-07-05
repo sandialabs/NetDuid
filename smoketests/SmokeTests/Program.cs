@@ -45,7 +45,7 @@ Console.WriteLine("Link-Layer Plus Time DUID");
 var llTimeBytes = new byte[] { 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x11, 0x22, 0x33, 0x44, 0x55 };
 var llTimeString = "00:01:00:00:00:00:00:01:00:11:22:33:44:55";
 var llTimeStringDash = "00-01-00-00-00-00-00-01-00-11-22-33-44-55";
-var llTimeStringNoDelim = "000100000000000100112233445566";
+var llTimeStringNoDelim = "0001000000000001001122334455";
 
 Check(
     "Create from bytes",

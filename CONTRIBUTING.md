@@ -2,7 +2,7 @@
 
 ## Prerequisites
 
-- .NET SDK (see `src/global.json` for the pinned version)
+- .NET SDK (see `global.json` for the pinned version)
 - (optional) the dev container in `.devcontainer/` if you'd rather not install the SDK locally
 
 ## Build & test
