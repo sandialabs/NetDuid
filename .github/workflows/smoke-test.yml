@@ -18,6 +18,8 @@ jobs:
   smoke-test:
     name: ${{ matrix.os }} / ${{ matrix.framework }}
     runs-on: ${{ matrix.os }}
+    env:
+      HUSKY: 0
 
     strategy:
       fail-fast: false
@@ -64,8 +66,8 @@ jobs:
       - name: Restore SmokeTests consumer
         run: dotnet restore smoketests/SmokeTests/SmokeTests.csproj -p:NetDuidVersion=99.0.0-smoke --verbosity quiet
 
-      - name: Build SmokeTests consumer
-        run: dotnet build smoketests/SmokeTests/SmokeTests.csproj --no-restore --configuration Release -p:NetDuidVersion=99.0.0-smoke --verbosity quiet
+      - name: Build SmokeTests consumer (${{ matrix.framework }})
+        run: dotnet build smoketests/SmokeTests/SmokeTests.csproj --no-restore --configuration Release --framework ${{ matrix.framework }} -p:NetDuidVersion=99.0.0-smoke --verbosity quiet
 
       - name: Run smoke tests (${{ matrix.framework }})
         run: >

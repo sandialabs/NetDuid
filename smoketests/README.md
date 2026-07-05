@@ -10,7 +10,7 @@ bypasses NuGet asset-selection entirely.  A project reference can never surface:
 - Incorrect `lib/<tfm>/` folder layout in the `.nupkg`
 - Wrong TFM asset being chosen by a consumer (e.g. `net9.0` falling back to `netstandard2.0`
   when a dedicated `net9.0` asset should exist)
-- BCL types referenced by a C# 14 language feature that are missing on an older runtime
+- BCL types referenced by a C# language feature that are missing on an older runtime
 - Missing or mismatched transitive dependencies declared in the `.nuspec`
 
 Smoke tests fix this by **packing the library first**, then referencing it as a NuGet package
@@ -65,21 +65,92 @@ Covers **net48** (→ `netstandard2.0` asset), **net8.0**, **net9.0**, **net10.0
 
 | Area | Checks |
 |---|---|
-| `Subnet` (IPv4) | Parse, construct (address+prefix, two addresses), Netmask, Contains, Overlaps, Touches, Enumerate, ContainsAnyPrivateAddresses, ContainsAllPrivateAddresses, TryParse, Deconstruct |
-| `Subnet` (IPv6) | Parse, construct, Contains, Overlaps |
-| `IPAddressRange` | Construct, Contains, Overlaps |
-| `SubnetUtilities` | FewestConsecutiveSubnetsFor, PrivateIPAddressRangesList, LargestSubnet, SmallestSubnet |
-| `IPAddressMath` | Increment, TryIncrement, IsGreaterThan/LessThan/EqualTo, IsBetween, Max, Min, IsAtMin/Max |
-| `IPAddressUtilities` | IsIPv4, IsIPv6, IsPrivate, IPv4Min/MaxAddress, IsValidNetMask, ParseFromHexString |
-| `IPAddressConverters` | NetmaskToCidrRoutePrefix, ToHexString, ToNumericString |
-| `Comparers` | DefaultIPAddressComparer, DefaultIIPAddressRangeComparer, DefaultAddressFamilyComparer |
+| `Duid` (all types) | Create from bytes, Parse/TryParse (colon, dash, undelimited), type detection |
+| `IFormattable` / `ToString` | Default (uppercase colon), uppercase dash, lowercase colon, lowercase dash, no delimiter |
+| Equality | Same bytes, different bytes, null, `==`, `!=`, `GetHashCode` |
+| Comparison | `CompareTo`, `<`, `>`, `<=`, `>=` |
+| `GetBytes` | Content, read-only snapshot semantics |
+| Edge cases | 3-byte minimum, 130-byte maximum, null/empty/garbage input |
+
+## How the package reference works
+
+The consumer project (`SmokeTests.csproj`) does **not** use a project reference.
+Instead it declares:
+
+```xml
+<PackageReference Include="NetDuid" Version="$(NetDuidVersion)"
+                  Condition="'$(NetDuidVersion)' != '0.0.0-placeholder'" />
+```
+
+This indirection is necessary because there is no published NetDuid package on nuget.org.
+The workflow is always the same:
+
+1. **Pack** `src/NetDuid/NetDuid.csproj` with a synthetic version (e.g. `99.0.0-smoke`)
+   into `smoketests/feed/`.
+2. **Restore** passing `-p:NetDuidVersion=99.0.0-smoke` — the condition matches, NuGet
+   resolves the package from the local feed.
+3. **Build and run** the consumer project.
+
+### The placeholder version
+
+When no `NetDuidVersion` is passed, the csproj defaults to `0.0.0-placeholder`.
+The `Condition` on the `PackageReference` excludes it entirely in this state,
+preventing restore failures when the local feed does not exist.
+
+### org-level dependency submission
+
+The repository has an org-wide `submit-nuget` action that scans every `.csproj` and
+runs `dotnet restore` to submit dependency graphs.  Because `0.0.0-placeholder` causes
+the `PackageReference` to be omitted, the restore succeeds without needing the local
+feed — no manual exclusions required.
 
 ## CI
 
-The `smoke-test` job in `.github/workflows/build.yml` runs automatically on every PR and push
-to `main`, after the main `build` job succeeds.  It uses a matrix strategy:
+Smoke tests run in the independent **`smoke-test.yml`** workflow (`.github/workflows/smoke-test.yml`),
+triggered on every PR and push to `main`:
 
 - **ubuntu-latest** → net8.0, net9.0, net10.0
 - **windows-latest** → net48 (netstandard2.0 asset validation)
 
-Exit code 1 from any framework fails the job.
+The workflow packs the library, restores the consumer against the local feed, builds
+per-TFM, and runs the console app.  Any non-zero exit code from the consumer fails the job.
+
+## Developer notes
+
+### Opening in an IDE
+
+Opening `smoketests/SmokeTests/SmokeTests.csproj` directly in an IDE will show build
+errors — the `PackageReference` is conditioned away and the `Duid` type is not available.
+This is expected.  Always use the run scripts or the CI workflow, which first pack the
+library into the local feed.
+
+If you need IDE support for editing, open the whole repo solution (`src/`) instead.
+
+### Adding a new test
+
+All smoke tests are top-level `Check()` calls in `Program.cs`.  Add a new block:
+
+```csharp
+Check(
+    "Description of what is tested",
+    () =>
+    {
+        // Arrange
+        var duid = new Duid(new byte[] { 0x00, 0x04, 0x01, 0x02 });
+        // Assert
+        Require(duid.Type == DuidType.Uuid, "expected UUID type");
+    }
+);
+```
+
+The project uses no test framework — it is a self-checking console app.  `Check()`
+catches exceptions, prints `[PASS]` / `[FAIL]`, and exits with code 1 on any failure.
+
+### Troubleshooting
+
+| Symptom | Likely cause |
+|---|---|
+| `NU1301: The local source '.../feed' doesn't exist` | Restore without first packing.  Run the script or CI workflow. |
+| `NU1101: Unable to find package NetDuid` | The feed is populated with a different version than `NetDuidVersion` expects.  Check the version passed to `pack` and `restore` match. |
+| `CS0246: The type or namespace 'Duid' could not be found` | The `PackageReference` was conditioned away (placeholder version).  Pass `-p:NetDuidVersion=...` with a real version. |
+| `Failed to restore` on unrelated checkout | Org-level `submit-nuget` ran restore without a local feed.  Verify the placeholder condition is intact. |

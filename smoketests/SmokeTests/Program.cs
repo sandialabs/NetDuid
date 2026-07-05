@@ -344,10 +344,11 @@ Check(
     "operator <= and >=",
     () =>
     {
+        var small2 = new Duid(new byte[] { 0x00, 0x01, 0x00, 0x01 });
         Require(small <= medium, "small <= medium");
-        Require(small <= small, "small <= small");
+        Require(small2 <= small, "small <= small");
         Require(medium >= small, "medium >= small");
-        Require(small >= small, "small >= small");
+        Require(small2 >= small, "small >= small");
     }
 );
 
@@ -373,10 +374,9 @@ Check(
     {
         var duid = new Duid(llTimeBytes);
         var bytes = duid.GetBytes();
-        Require(
-            !bytes.GetType().GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(ICollection<>)),
-            "collection should be read-only"
-        );
+        var first = bytes.First();
+        llTimeBytes[0] = 0xFF;
+        Require(bytes.First() == first, "GetBytes returns a snapshot, not a live view");
     }
 );
 
