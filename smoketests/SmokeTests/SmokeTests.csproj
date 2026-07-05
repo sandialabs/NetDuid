@@ -14,7 +14,7 @@
     <!--
       NetDuidVersion is injected by the run script (e.g. -p:NetDuidVersion=99.0.0-smoke).
       The default here exists only so the project can be opened in an IDE without errors;
-      the package won't resolve until you run the script and populate smoke-tests/feed/.
+      the package won't resolve until you run the script and populate smoketests/feed/.
     -->
     <NetDuidVersion Condition="'$(NetDuidVersion)' == ''">0.0.0-placeholder</NetDuidVersion>
   </PropertyGroup>
@@ -22,7 +22,13 @@
     <!--
       Package reference — NOT a project reference.  This exercises the real NuGet asset
       selection logic (netstandard2.0 vs net8.0 vs …) rather than the build output.
+
+      Conditioned out when NetDuidVersion is the default placeholder so that
+      org-level dotnet restore (e.g. submit-nuget dependency submission) does
+      not fail with NU1301 (missing local feed).  Only CI workflows that pack
+      into smoketests/feed/ first set a non-placeholder version.
     -->
-    <PackageReference Include="NetDuid" Version="$(NetDuidVersion)" />
+    <PackageReference Include="NetDuid" Version="$(NetDuidVersion)"
+                      Condition="'$(NetDuidVersion)' != '0.0.0-placeholder'" />
   </ItemGroup>
 </Project>
