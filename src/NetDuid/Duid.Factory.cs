@@ -110,53 +110,36 @@ namespace NetDuid
         /// <returns>A byte array representing the hexadecimal values in the string.</returns>
         private static byte[] DelimitedStringToBytes(string str, int delimiterLength)
         {
-            // delimited bytes are a bit ugly as values between 0x0 and 0xF may optionally not include a leading '0' in byte octets
-            // byte length is not known beforehand, but the maximum size can be calculated.
-            // Each byte is represented by 1 or 2 characters plus the length of the delimiter (including a non-existent trailing delimiter
-            // which will be trimmed on copy to array).
-            var maxBytesLength = (str.Length + delimiterLength) / (1 + delimiterLength);
-            var bytes = new byte[maxBytesLength];
-            var byteIndex = 0;
+            var result = new List<byte>();
 
-            // Iterate though the string a character at a time looking ahead to the the next character
-            // If the next character is hexadecimal character a full octet is present, if it is not then it is considered the start
-            // if the delimiter is the next character (characterIndex+1). It is assumed that a delimiter will never start with a
-            // hexadecimal digit.
             var characterIndex = 0;
             while (characterIndex < str.Length)
             {
-                var ithChar = HexCharToUpper(str[characterIndex]); // ith character should always be a hex digit; it may also be a '0' prefix
+                var ithChar = HexCharToUpper(str[characterIndex]);
 
-                if (characterIndex == str.Length - 1) // at last position in string, no possibility of next
+                if (characterIndex == str.Length - 1)
                 {
-                    // process the final character
-                    bytes[byteIndex] = HexCharValue(ithChar);
-                    byteIndex++; // byte was built, go to next index position in the byte array
-                    break; // break the loop
+                    result.Add(HexCharValue(ithChar));
+                    break;
                 }
 
-                // there exists a character after the ith character of the string
                 var nextChar = HexCharToUpper(str[characterIndex + 1]);
                 var nextCharIsHex = (nextChar >= '0' && nextChar <= '9') || (nextChar >= 'A' && nextChar <= 'F');
 
-                if (nextCharIsHex) // next character is hex
+                if (nextCharIsHex)
                 {
-                    bytes[byteIndex] = (byte)((HexCharValue(ithChar) << 4) | HexCharValue(nextChar)); // build a byte from two hex characters
-                    characterIndex++; // two digit octet consumed; skip the next character in the iteration
+                    result.Add((byte)((HexCharValue(ithChar) << 4) | HexCharValue(nextChar)));
+                    characterIndex++;
                 }
-                else // next character must be the start of delimiter
+                else
                 {
-                    bytes[byteIndex] = HexCharValue(ithChar);
+                    result.Add(HexCharValue(ithChar));
                 }
 
-                byteIndex++; // byte was built, go to next index position in the byte array
                 characterIndex += delimiterLength + 1;
             }
 
-            // build actual byte array based on findings
-            var result = new byte[byteIndex];
-            Buffer.BlockCopy(bytes, 0, result, 0, byteIndex);
-            return result;
+            return result.ToArray();
         }
 
         // private static char HexCharToUpper(char input)
