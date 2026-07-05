@@ -1,5 +1,4 @@
 <Project>
-
   <!-- Project-type conventions based on folder/name suffix, so individual
        .csproj files don't need to repeat this. Adjust the Condition checks
        if your naming suffixes differ. -->
@@ -13,5 +12,4 @@
     <IsPackable>false</IsPackable>
     <OutputType>Exe</OutputType>
   </PropertyGroup>
-
 </Project>

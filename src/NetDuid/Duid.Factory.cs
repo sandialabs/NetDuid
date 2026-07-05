@@ -142,22 +142,11 @@ namespace NetDuid
             return result.ToArray();
         }
 
-        // private static char HexCharToUpper(char input)
-        // {
-        //     if (input >= 'a' && input <= 'f')
-        //     {
-        //         return (char)(input - ' '); // Upper case is 32 characters before lower case in ASCII; it just so happens space is 32
-        //     }
-        //
-        //     return input;
-        // }
-
         /// <summary>
-        /// Converts a lowercase hexadecimal character to its uppercase equivalent.
+        /// Converts a hexadecimal character to its uppercase equivalent.
         /// </summary>
-        /// <param name="input">The lowercase hexadecimal character.</param>
+        /// <param name="input">The hexadecimal character.</param>
         /// <returns>The uppercase equivalent of the hexadecimal character.</returns>
-        // Improved: use char.ToUpperInvariant for clarity
         private static char HexCharToUpper(char input) => char.ToUpperInvariant(input);
 
         /// <summary>

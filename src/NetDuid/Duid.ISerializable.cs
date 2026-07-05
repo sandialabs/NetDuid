@@ -24,7 +24,7 @@ namespace NetDuid
                     ?? throw new SerializationException("unrecognized input byte array");
                 _duidBytes = ConstructWithBytesGuard(bytes);
                 Type = GetDuidType();
-                InitializeLazyHashCode();
+                _lazyHashCode = new Lazy<int>(ComputeHashCode);
                 return;
             }
 
