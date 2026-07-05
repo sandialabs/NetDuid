@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace NetDuid
+﻿namespace NetDuid
 {
     /// <content>
     ///     <see cref="Duid"/> implementation of <see cref="IComparable{Duid}"/> and <see cref="IComparable"/>

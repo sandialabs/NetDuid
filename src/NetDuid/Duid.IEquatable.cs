@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-
-namespace NetDuid
+﻿namespace NetDuid
 {
     /// <content>
     ///     <see cref="Duid"/> implementation of <see cref="IEquatable{Duid}"/>

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 
 namespace NetDuid
 {
@@ -124,7 +123,7 @@ namespace NetDuid
                 }
 
                 var nextChar = HexCharToUpper(str[characterIndex + 1]);
-                var nextCharIsHex = (nextChar >= '0' && nextChar <= '9') || (nextChar >= 'A' && nextChar <= 'F');
+                var nextCharIsHex = nextChar is >= '0' and <= '9' or >= 'A' and <= 'F';
 
                 if (nextCharIsHex)
                 {
@@ -139,7 +138,7 @@ namespace NetDuid
                 characterIndex += delimiterLength + 1;
             }
 
-            return result.ToArray();
+            return [.. result];
         }
 
         /// <summary>

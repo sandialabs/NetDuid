@@ -53,7 +53,7 @@ namespace NetDuid
             return DelimitedOctetsRegex;
         }
 
-        private static readonly Regex DelimitedOctetsRegex = new Regex(DelimitedOctetsPattern, RegexOptions.Compiled);
+        private static readonly Regex DelimitedOctetsRegex = new(DelimitedOctetsPattern, RegexOptions.Compiled);
 #endif
 
         /// <summary>
@@ -69,7 +69,7 @@ namespace NetDuid
             return UndelimitedOctetsRegex;
         }
 
-        private static readonly Regex UndelimitedOctetsRegex = new Regex(
+        private static readonly Regex UndelimitedOctetsRegex = new(
             UndelimitedOctetPattern,
             RegexOptions.Compiled | RegexOptions.IgnoreCase
         );

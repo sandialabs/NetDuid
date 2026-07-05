@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 using NetDuid;
 using NetDuid.Tests.XunitSerializers;
 using Xunit;

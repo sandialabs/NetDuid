@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace NetDuid
+﻿namespace NetDuid
 {
     /// <content>
     ///     <see cref="Duid"/> implementation of <see cref="IFormattable"/>
@@ -103,31 +101,18 @@ namespace NetDuid
             else
             {
                 // Two character format string
-                switch (char.ToUpper(format[0]))
+                toUpper = char.ToUpper(format[0]) switch
                 {
-                    case 'U':
-                    case 'u':
-                        toUpper = true;
-                        break;
-                    case 'L':
-                    case 'l':
-                        toUpper = false;
-                        break;
-                    default:
-                        throw new FormatException($"Invalid format string: \"{format}\".");
-                }
-
-                switch (format[1])
+                    'U' or 'u' => true,
+                    'L' or 'l' => false,
+                    _ => throw new FormatException($"Invalid format string: \"{format}\"."),
+                };
+                delimiter = format[1] switch
                 {
-                    case ':':
-                        delimiter = ':';
-                        break;
-                    case '-':
-                        delimiter = '-';
-                        break;
-                    default:
-                        throw new FormatException($"Invalid format string: \"{format}\".");
-                }
+                    ':' => ':',
+                    '-' => '-',
+                    _ => throw new FormatException($"Invalid format string: \"{format}\"."),
+                };
             }
 
             // Calculate the length of the resulting string

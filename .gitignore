@@ -237,3 +237,6 @@ src/NetDuid/NetDuid.xml
 
 # Container files
 .devcontainer/
+
+# Local scratch files (notes, plans, review handoffs)
+.scratch/
