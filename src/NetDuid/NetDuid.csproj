@@ -26,7 +26,6 @@
     <PackageId>NetDuid</PackageId>
     <Description>A robust and efficient .NET representation of DHCP Unique Identifiers (DUIDs) as
       specified in RFC 8415 and RFC 6355.</Description>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <NeutralLanguage>en</NeutralLanguage>
     <PackageLanguage>en-US</PackageLanguage>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
