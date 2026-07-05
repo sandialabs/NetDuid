@@ -1,11 +1,11 @@
 # NetDuid
 
-![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/sandialabs/NetDuid/build.yml?branch=main)
-[![NuGet Version](https://img.shields.io/nuget/v/NetDuid)](https://www.nuget.org/packages/NetDuid)
-[![GitHub Release](https://img.shields.io/github/v/release/sandialabs/NetDuid)](https://github.com/sandialabs/NetDuid/releases)
-[![GitHub Tag](https://img.shields.io/github/v/tag/sandialabs/NetDuid)](https://github.com/sandialabs/NetDuid/tags)
-![Targets](https://img.shields.io/badge/.NET%20Standard%202.0%20|%20.NET%208.0%20|%20.NET%209.0|%20.NET%2010.0-blue)
-[![Apache 2.0 License](https://img.shields.io/github/license/sandialabs/NetDuid?logo=apache)](https://github.com/sandialabs/NetDuid/blob/main/LICENSE)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/sandialabs/NetDuid/build.yml?branch=main&logo=github&label=build)
+[![NuGet Version](https://img.shields.io/nuget/v/NetDuid?logo=nuget)](https://www.nuget.org/packages/NetDuid)
+[![NuGet Downloads](https://img.shields.io/nuget/dt/NetDuid?logo=nuget)](https://www.nuget.org/packages/NetDuid)
+[![GitHub Release](https://img.shields.io/github/v/release/sandialabs/NetDuid?logo=github)](https://github.com/sandialabs/NetDuid/releases)
+![Targets](https://img.shields.io/badge/.NET-Standard%202.0%20%7C%208.0%20%7C%209.0%20%7C%2010.0-blue)
+[![License](https://img.shields.io/github/license/sandialabs/NetDuid?logo=apache)](https://github.com/sandialabs/NetDuid/blob/main/LICENSE)
 
 ## About the Project
 
@@ -22,12 +22,6 @@ The main goals of this project are:
 - **Performance**: Optimize the library for performance, ensuring that it can handle large volumes of DUIDs efficiently.
 - **Cross-Platform and Target Support**: Target multiple .NET versions to ensure compatibility across different platforms and environments.
 
-### Features
-
-- **Parsing and Construction**: Easily parse DUIDs from strings or construct them from byte arrays.
-- **Comparison and Equality**: Implement comparison and equality operations for DUIDs.
-- **Formatting**: Convert DUIDs to formatted string representations for display or logging.
-
 ### Use Cases
 
 This library is intended for use in various scenarios, including but not limited to:
@@ -37,6 +31,8 @@ This library is intended for use in various scenarios, including but not limited
 - **Testing and Simulation**: Simulating DHCPv6 clients and servers in test environments.
 
 ## Getting Started
+
+For a complete API reference, see [API_REFERENCE.md](API_REFERENCE.md).
 
 You are most likely to be interacting with the `NetDuid.Duid` type.
 
@@ -122,6 +118,27 @@ The `DuidType` enum emits the following values
 The `Duid` class implements `IEquatable<Duid>`, `IComparable<Duid>`, `IComparable` and the standard Equality and Comparison operators.
 
 The `CompareTo`, and its operators, is not done in mathematical order or bytes, but rather first by byte length then by unsigned value. When using the comparison operators a `null` value is considered less than any non-`null` value.
+
+## New Features in v3.0.0
+
+### Whitespace-Tolerant Parsing
+
+`Parse` and `TryParse` now trim leading and trailing whitespace from input strings, so `"  00:01:A2:B3  "` parses successfully.
+
+### Performance Improvements
+
+- **Regex source generation**: On .NET 7+ targets, parsing uses `[GeneratedRegex]` for compile-time regex generation, reducing startup overhead.
+- **Lazy hash code**: The hash code is computed once and cached. Deserialized instances also initialize the cache, fixing a `NullReferenceException` in earlier versions.
+
+## Breaking Changes in v3.0.0
+
+### `GetBytes()` Returns an Immutable View
+
+The runtime type of the returned `IReadOnlyCollection<byte>` changed from `byte[]` to `ReadOnlyCollection<byte>`. Previously, callers could cast the return value and mutate the DUID's internal state. The new implementation wraps the array via `Array.AsReadOnly()`, enforcing true immutability.
+
+### `CompareTo` Null Contract Corrected
+
+`CompareTo(Duid?)` and `CompareTo(object?)` previously returned `-1` when comparing any non-null DUID to `null`, violating the `IComparable<T>` standard contract (non-null > null should return `1`). Apologies — this was improperly implemented and went unnoticed because null DUIDs are uncommon in practice. v3.0.0 corrects both overloads to return `1`.
 
 ## Developer Notes
 
