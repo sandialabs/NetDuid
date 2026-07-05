@@ -30,6 +30,11 @@ namespace NetDuid
         /// </remarks>
         public DuidType Type { get; }
 
+        private void InitializeLazyHashCode()
+        {
+            _lazyHashCode = new Lazy<int>(ComputeHashCode);
+        }
+
         #region constructors
 
         /// <summary>
@@ -41,7 +46,7 @@ namespace NetDuid
             _duidBytes = ConstructWithBytesGuard(bytes);
             Type = GetDuidType();
 
-            _lazyHashCode = new Lazy<int>(ComputeHashCode); // for a lazy hash code requiring only a single generation
+            InitializeLazyHashCode();
         }
 
         /// <summary>

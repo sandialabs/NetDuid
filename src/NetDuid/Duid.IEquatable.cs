@@ -35,8 +35,7 @@ namespace NetDuid
             }
 
             // considered equal if this and other have the same number of bytes, and their bytes are the same
-            var otherBytes = other.GetBytes();
-            return _duidBytes.Length == otherBytes.Count && _duidBytes.SequenceEqual(otherBytes);
+            return _duidBytes.Length == other._duidBytes.Length && _duidBytes.SequenceEqual(other._duidBytes);
         }
 
         /// <inheritdoc/>
