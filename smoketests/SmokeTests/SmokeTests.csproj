@@ -23,6 +23,6 @@
       Package reference — NOT a project reference.  This exercises the real NuGet asset
       selection logic (netstandard2.0 vs net8.0 vs …) rather than the build output.
     -->
-    <PackageReference Include="NetDuid" />
+    <PackageReference Include="NetDuid" Version="$(NetDuidVersion)" />
   </ItemGroup>
 </Project>
