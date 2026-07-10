@@ -227,7 +227,7 @@ namespace NetDuid.Tests
             var result = duid.GetBytes();
 
             // Assert
-            Assert.IsAssignableFrom<IReadOnlyCollection<byte>>(result);
+            Assert.IsType<IReadOnlyCollection<byte>>(result, exactMatch: false);
             Assert.Equal(inputBytes.Length, result.Count);
         }
 
@@ -249,7 +249,7 @@ namespace NetDuid.Tests
         public void GetBytes_ReturnsReadOnlyView_Test()
         {
             // Arrange
-            var duid = new Duid(new byte[] { 0x00, 0x01, 0x02 });
+            var duid = new Duid([0x00, 0x01, 0x02]);
 
             // Act
             var result = duid.GetBytes();

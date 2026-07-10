@@ -1,4 +1,7 @@
 ﻿using System.Globalization;
+#if !NETSTANDARD2_0
+using System.Diagnostics.CodeAnalysis;
+#endif
 
 namespace NetDuid
 {
@@ -22,7 +25,13 @@ namespace NetDuid
         ///         <item>string of undelimited hexadecimal octet pairs</item>
         ///     </list>
         /// </remarks>
-        public static bool TryParse(string duidString, out Duid duid)
+        public static bool TryParse(
+#if !NETSTANDARD2_0
+            [NotNullWhen(true)] string duidString, [MaybeNullWhen(false)] out Duid duid
+#else
+            string duidString, out Duid duid
+#endif
+        )
         {
             duid = null;
 

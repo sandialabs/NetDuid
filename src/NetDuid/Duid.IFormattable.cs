@@ -55,103 +55,83 @@
         /// <exception cref="FormatException">Thrown when the format string is invalid.</exception>
         public string ToString(string format, IFormatProvider formatProvider)
         {
-            // Default format is uppercase with colon delimiter if format is null or empty
-            if (string.IsNullOrEmpty(format))
-            {
-                format = "U:"; // Default format
-            }
+            var (delimiter, toUpper) = ParseFormatString(format);
 
-            // Format string should be at most 2 characters long
-            if (format.Length > 2)
-            {
-                throw new FormatException($"Invalid format string: \"{format}\".");
-            }
-
-            char? delimiter;
-            bool toUpper;
-
-            // Determine the formatting options based on the format string
-            if (format.Length == 1)
-            {
-                // Single character format string
-                switch (format[0])
-                {
-                    case 'U':
-                    case 'u':
-                        toUpper = true;
-                        delimiter = null;
-                        break;
-                    case 'L':
-                    case 'l':
-                        toUpper = false;
-                        delimiter = null;
-                        break;
-                    case ':':
-                        toUpper = true;
-                        delimiter = ':';
-                        break;
-                    case '-':
-                        toUpper = true;
-                        delimiter = '-';
-                        break;
-                    default:
-                        throw new FormatException($"Invalid format string: \"{format}\".");
-                }
-            }
-            else
-            {
-                // Two character format string
-                toUpper = char.ToUpper(format[0]) switch
-                {
-                    'U' or 'u' => true,
-                    'L' or 'l' => false,
-                    _ => throw new FormatException($"Invalid format string: \"{format}\"."),
-                };
-                delimiter = format[1] switch
-                {
-                    ':' => ':',
-                    '-' => '-',
-                    _ => throw new FormatException($"Invalid format string: \"{format}\"."),
-                };
-            }
-
-            // Calculate the length of the resulting string
-            var octetLength = delimiter is null ? 2 : 3; // Each byte is represented by 2 hex characters plus an optional delimiter
+            var octetLength = delimiter is null ? 2 : 3;
             var resultLength = _duidBytes.Length * octetLength;
             var characters = new char[resultLength];
-
-            // Select the appropriate nibble formatting based on the case preference
             var nibbleFormatter = toUpper ? (Func<int, char>)GetUpperHexNibble : GetLowerHexNibble;
 
-            // Convert each byte to its hexadecimal representation
             for (var i = 0; i < _duidBytes.Length; i++)
             {
                 var @byte = _duidBytes[i];
-                var characterIndex = i * octetLength; // Calculate the index in the result array
+                var characterIndex = i * octetLength;
 
-                // Convert the byte to hexadecimal characters
-                // Improved: bit shifts are idiomatic for nibble extraction
                 characters[characterIndex] = nibbleFormatter(@byte >> 4);
                 characters[characterIndex + 1] = nibbleFormatter(@byte & 0x0F);
 
-                // Add the delimiter if specified
-                if (delimiter != null)
+                if (delimiter is not null)
                 {
-                    characters[characterIndex + 2] = (char)delimiter;
+                    characters[characterIndex + 2] = delimiter.Value;
                 }
             }
 
-            // Return the formatted string, excluding the trailing delimiter if present
-            if (delimiter is null)
-            {
-                return new string(characters);
-            }
-            return new string(characters, 0, resultLength - 1);
+            return delimiter is null ? new string(characters) : new string(characters, 0, resultLength - 1);
         }
 
         #endregion
 
         #region utility methods
+
+        /// <summary>
+        /// Parses a format string into a delimiter character and case preference.
+        /// </summary>
+        /// <param name="format">
+        /// A format string that specifies the formatting options.
+        /// Valid values: <c>null</c>, empty, <c>"U"</c>, <c>"u"</c>, <c>"L"</c>, <c>"l"</c>,
+        /// <c>":"</c>, <c>"-"</c>, <c>"U:"</c>, <c>"u:"</c>, <c>"U-"</c>, <c>"u-"</c>,
+        /// <c>"L:"</c>, <c>"l:"</c>, <c>"L-"</c>, <c>"l-"</c>.
+        /// </param>
+        /// <returns>A tuple containing the delimiter character (or <c>null</c> for no delimiter) and whether to use uppercase hex.</returns>
+        /// <exception cref="FormatException">Thrown when the format string is invalid.</exception>
+        private static (char? delimiter, bool toUpper) ParseFormatString(string format)
+        {
+            if (string.IsNullOrEmpty(format))
+            {
+                return (':', true);
+            }
+
+            if (format.Length > 2)
+            {
+                throw new FormatException($"Invalid format string: \"{format}\".");
+            }
+
+            if (format.Length == 1)
+            {
+                return format[0] switch
+                {
+                    'U' or 'u' => (null, true),
+                    'L' or 'l' => (null, false),
+                    ':' => (':', true),
+                    '-' => ('-', true),
+                    _ => throw new FormatException($"Invalid format string: \"{format}\"."),
+                };
+            }
+
+            var toUpper = char.ToUpper(format[0]) switch
+            {
+                'U' => true,
+                'L' => false,
+                _ => throw new FormatException($"Invalid format string: \"{format}\"."),
+            };
+            var delimiter = format[1] switch
+            {
+                ':' => ':',
+                '-' => '-',
+                _ => throw new FormatException($"Invalid format string: \"{format}\"."),
+            };
+            return (delimiter, toUpper);
+        }
 
         /// <summary>
         /// Converts an integer to its corresponding uppercase hexadecimal character.

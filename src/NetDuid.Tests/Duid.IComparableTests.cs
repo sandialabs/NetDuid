@@ -10,24 +10,24 @@ namespace NetDuid.Tests
         {
             var theoryData = new TheoryData<int, Duid, Duid>();
 
-            var referenceDuid = new Duid(new byte[] { 0x00, 0x00, 0xff });
+            var referenceDuid = new Duid([0x00, 0x00, 0xff]);
 
             AddTestCase(0, referenceDuid, referenceDuid); // by reference
             AddTestCase(1, referenceDuid, null); // null case — non-null is greater than null per IComparable contract
 
             // equality
-            AddCommutativeTestCases(0, new byte[] { 0x00, 0x00, 0x00 }, new byte[] { 0x00, 0x00, 0x00 });
-            AddCommutativeTestCases(0, new byte[] { 0xFF, 0x00, 0x80 }, new byte[] { 0xFF, 0x00, 0x80 });
+            AddCommutativeTestCases(0, [0x00, 0x00, 0x00], [0x00, 0x00, 0x00]);
+            AddCommutativeTestCases(0, [0xFF, 0x00, 0x80], [0xFF, 0x00, 0x80]);
 
             // by length
             AddCommutativeTestCases(-1, new byte[3], new byte[4]);
             AddCommutativeTestCases(-1, new byte[3], new byte[130]);
 
             // by length, then big endian value
-            AddCommutativeTestCases(-1, new byte[] { 0xFF, 0x00, 0x00 }, new byte[] { 0xFF, 0xFF, 0xFF, 0xFF });
-            AddCommutativeTestCases(-1, new byte[] { 0xFF, 0xFF, 0xFF }, new byte[] { 0xFF, 0x00, 0x00, 0x00 });
-            AddCommutativeTestCases(-1, new byte[] { 0x00, 0x00, 0x00 }, new byte[] { 0x00, 0x00, 0x01 });
-            AddCommutativeTestCases(-1, new byte[] { 0x00, 0x00, 0x00 }, new byte[] { 0x80, 0x00, 0x00 });
+            AddCommutativeTestCases(-1, [0xFF, 0x00, 0x00], [0xFF, 0xFF, 0xFF, 0xFF]);
+            AddCommutativeTestCases(-1, [0xFF, 0xFF, 0xFF], [0xFF, 0x00, 0x00, 0x00]);
+            AddCommutativeTestCases(-1, [0x00, 0x00, 0x00], [0x00, 0x00, 0x01]);
+            AddCommutativeTestCases(-1, [0x00, 0x00, 0x00], [0x80, 0x00, 0x00]);
 
             return theoryData;
 
@@ -102,7 +102,7 @@ namespace NetDuid.Tests
         public void Compare_Object_NotDuid_Throws_ArgumentException_Test(object other)
         {
             // Arrange
-            var duid = new Duid(new byte[] { 0x00, 0x00, 0xff });
+            var duid = new Duid([0x00, 0x00, 0xff]);
 
             // Act
             // Assert

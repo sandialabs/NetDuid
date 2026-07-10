@@ -41,7 +41,11 @@ namespace NetDuid
             IFormatProvider provider,
             [MaybeNullWhen(false)] out Duid result
 #else
-            string s, IFormatProvider provider, out Duid result
+            string s,
+#pragma warning disable RCS1163, IDE0060// Unused parameter
+            IFormatProvider provider,
+#pragma warning restore IDE0060, RCS1163 // Unused parameter
+            out Duid result
 #endif
         )
         {
@@ -61,7 +65,11 @@ namespace NetDuid
         ///         <item>string of undelimited hexadecimal octet pairs</item>
         ///     </list>
         /// </remarks>
-        public static Duid Parse(string s, IFormatProvider provider)
+        public static Duid Parse(string s,
+#pragma warning disable RCS1163, IDE0060// Unused parameter
+            IFormatProvider provider
+#pragma warning restore IDE0060, RCS1163 // Unused parameter
+        )
         {
             return Parse(s); // Use the existing TryParse method as the provider is not relevant
         }

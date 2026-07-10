@@ -11,21 +11,21 @@ namespace NetDuid.Tests
             var theoryData = new TheoryData<bool, Duid, Duid>();
 
             // reference equality
-            var referenceDuid = new Duid(new byte[] { 0x00, 0x00, 0xff });
+            var referenceDuid = new Duid([0x00, 0x00, 0xff]);
             AddTestCase(true, referenceDuid, referenceDuid); // by reference
             AddTestCase(false, referenceDuid, null); // null case
 
             // equality
-            AddCommutativeTestCases(true, new byte[] { 0x00, 0x00, 0x00 }, new byte[] { 0x00, 0x00, 0x00 });
-            AddCommutativeTestCases(true, new byte[] { 0xFF, 0x00, 0x80 }, new byte[] { 0xFF, 0x00, 0x80 });
+            AddCommutativeTestCases(true, [0x00, 0x00, 0x00], [0x00, 0x00, 0x00]);
+            AddCommutativeTestCases(true, [0xFF, 0x00, 0x80], [0xFF, 0x00, 0x80]);
 
             // inequality
             AddCommutativeTestCases(false, new byte[3], new byte[4]);
             AddCommutativeTestCases(false, new byte[3], new byte[130]);
-            AddCommutativeTestCases(false, new byte[] { 0xFF, 0x00, 0x00 }, new byte[] { 0xFF, 0xFF, 0xFF, 0xFF });
-            AddCommutativeTestCases(false, new byte[] { 0xFF, 0xFF, 0xFF }, new byte[] { 0xFF, 0x00, 0x00, 0x00 });
-            AddCommutativeTestCases(false, new byte[] { 0x00, 0x00, 0x00 }, new byte[] { 0x00, 0x00, 0x01 });
-            AddCommutativeTestCases(false, new byte[] { 0x00, 0x00, 0x00 }, new byte[] { 0x80, 0x00, 0x00 });
+            AddCommutativeTestCases(false, [0xFF, 0x00, 0x00], [0xFF, 0xFF, 0xFF, 0xFF]);
+            AddCommutativeTestCases(false, [0xFF, 0xFF, 0xFF], [0xFF, 0x00, 0x00, 0x00]);
+            AddCommutativeTestCases(false, [0x00, 0x00, 0x00], [0x00, 0x00, 0x01]);
+            AddCommutativeTestCases(false, [0x00, 0x00, 0x00], [0x80, 0x00, 0x00]);
 
             return theoryData;
 
@@ -77,7 +77,7 @@ namespace NetDuid.Tests
         public void Equal_Object_NotDuid_Returns_False_Test(object other)
         {
             // Arrange
-            var duid = new Duid(new byte[] { 0x00, 0x00, 0xff });
+            var duid = new Duid([0x00, 0x00, 0xff]);
 
             // Act
             var result = duid.Equals(other);
@@ -118,7 +118,7 @@ namespace NetDuid.Tests
         public void HashCode_SameInstance_ReturnsStableHash_Test()
         {
             // Arrange
-            var duid = new Duid(new byte[] { 0x00, 0x01, 0x02, 0x03 });
+            var duid = new Duid([0x00, 0x01, 0x02, 0x03]);
 
             // Act
             var hash1 = duid.GetHashCode();
