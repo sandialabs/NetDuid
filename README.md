@@ -40,7 +40,7 @@ For a complete API reference, see [API_REFERENCE.md](API_REFERENCE.md).
 
 You are most likely to be interacting with the `NetDuid.Duid` type.
 
-The `Duid` type implements `IEquatable<Duid>`, `IComparable<Duid>`, `IFormattable`, `ISerializable`, and for .NET 8 and greater `IParsable<Duid>`.
+The `Duid` type implements `IEquatable<Duid>`, `IComparable<Duid>`, `IFormattable`, `ISerializable`, for .NET 7+ `IParsable<Duid>`, and for .NET 8+ `ISpanFormattable` and `IUtf8SpanFormattable`.
 
 The library "knows" RFC 8415 ("Link-layer address plus time", "Vendor-assigned unique ID based on Enterprise Number", and "Link-layer address") and RFC 6355 ("Universally Unique Identifier (UUID)") DUIDs, but can treat any valid `byte` array (a minimum of 3 bytes, and maximum of 130 bytes per the RFCs) as a DUID. An unhandled DUID type will be treated as an "Undefined" type, but otherwise functionality is identical.
 
@@ -53,6 +53,13 @@ The most common way to create a DUID is to construct it via an array of `byte` d
 ```csharp
 var duidBytes = new byte[] { 0x00, 0x01, 0x02, 0x03 };
 var duid = new Duid(duidBytes);
+```
+
+On .NET 8+ you can also construct from a `ReadOnlySpan<byte>`, which is useful for stack-allocated data or pool-sourced buffers:
+
+```csharp
+Span<byte> stackBytes = stackalloc byte[] { 0x00, 0x01, 0x02, 0x03 };
+var duid = new Duid((ReadOnlySpan<byte>)stackBytes);
 ```
 
 #### Parsing a string to a DUID
@@ -101,7 +108,9 @@ Simply calling `ToString()` will return the default format of upper cased colon 
 
 #### Bytes
 
-Calling `GetBytes()` will return a read only collection of the underlying bytes of a DUID.
+Calling `GetBytes()` will return a read only collection of the underlying bytes of a DUID. The `Length` property provides the octet count without any allocation.
+
+On .NET 8+, `Span` and `Memory` properties provide zero-allocation access to the underlying bytes as `ReadOnlySpan<byte>` and `ReadOnlyMemory<byte>` respectively.
 
 #### DUID Types
 
@@ -124,6 +133,14 @@ The `Duid` class implements `IEquatable<Duid>`, `IComparable<Duid>`, `IComparabl
 The `CompareTo`, and its operators, is not done in mathematical order or bytes, but rather first by byte length then by unsigned value. When using the comparison operators a `null` value is considered less than any non-`null` value.
 
 ## New Features in v3.0.0
+
+### Span-Based APIs (.NET 8+)
+
+- `Duid(ReadOnlySpan<byte>)` constructor — create DUIDs from stack-allocated or pool-sourced byte data.
+- `Span` / `Memory` properties — zero-allocation access to underlying bytes.
+- `ISpanFormattable` / `IUtf8SpanFormattable` — format DUIDs directly into character or UTF-8 byte buffers without intermediate string allocations.
+- `ToString(string)` convenience overload — call `duid.ToString("L")` without providing a format provider.
+- `Length` property — get the octet count without calling `GetBytes().Count`.
 
 ### Whitespace-Tolerant Parsing
 

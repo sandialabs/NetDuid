@@ -4,7 +4,7 @@
 
 The primary type of the library. Represents a DHCP Unique Identifier (DUID) as an immutable byte array.
 
-Implements: `IEquatable<Duid>`, `IComparable<Duid>`, `IComparable`, `IFormattable`, `ISerializable`, and (on .NET 7+) `IParsable<Duid>`.
+Implements: `IEquatable<Duid>`, `IComparable<Duid>`, `IComparable`, `IFormattable`, `ISerializable`, and (on .NET 7+) `IParsable<Duid>`. On .NET 8+ it additionally implements `ISpanFormattable` and `IUtf8SpanFormattable`.
 
 ---
 
@@ -33,6 +33,22 @@ var duid = new Duid(new List<byte> { 0x00, 0x01, 0x02, 0x03 });
 | 3–130 bytes | Success |
 | 131+ bytes | `ArgumentException` ("more than 130 octets") |
 
+#### `Duid(ReadOnlySpan<byte>)` (.NET 8+)
+
+```csharp
+public Duid(ReadOnlySpan<byte> bytes)
+```
+
+Creates a DUID from a read-only span of bytes. This constructor is useful when working with stack-allocated data, `ArrayPool<byte>`, or other span-based APIs. The bytes are copied defensively into an internal array.
+
+```csharp
+// from stack-allocated span
+Span<byte> stackBytes = stackalloc byte[] { 0x00, 0x01, 0x02, 0x03 };
+var duid = new Duid((ReadOnlySpan<byte>)stackBytes);
+```
+
+Same validation rules as the `IEnumerable<byte>` constructor. Throws `ArgumentException` on invalid input.
+
 ---
 
 ### Properties
@@ -52,6 +68,49 @@ var duid = new Duid(new byte[] { 0x00, 0x01, 0xAB, 0xCD });
 Console.WriteLine(duid.Type); // LinkLayerPlusTime
 ```
 
+#### `Length`
+
+```csharp
+public int Length { get; }
+```
+
+The number of octets in the DUID (always between 3 and 130 inclusive). This is a zero-allocation alternative to `GetBytes().Count`.
+
+```csharp
+var duid = new Duid(new byte[] { 0x00, 0x01, 0x02, 0x03 });
+Console.WriteLine(duid.Length); // 4
+```
+
+#### `Span` (.NET 8+)
+
+```csharp
+public ReadOnlySpan<byte> Span { get; }
+```
+
+Returns the DUID bytes as a read-only span. Provides zero-allocation, stack-friendly access to the underlying byte data.
+
+```csharp
+var duid = new Duid(new byte[] { 0x00, 0x01, 0x02, 0x03 });
+ReadOnlySpan<byte> span = duid.Span;
+Console.WriteLine(span.Length);        // 4
+Console.WriteLine(span[0]);           // 0
+Console.WriteLine(span.SequenceEqual(new byte[] { 0x00, 0x01, 0x02, 0x03 })); // True
+```
+
+#### `Memory` (.NET 8+)
+
+```csharp
+public ReadOnlyMemory<byte> Memory { get; }
+```
+
+Returns the DUID bytes as a read-only memory region. Useful for interop scenarios where `ReadOnlySpan<byte>` cannot be used (e.g., async operations, `IAsyncEnumerable`).
+
+```csharp
+var duid = new Duid(new byte[] { 0x00, 0x01, 0x02, 0x03 });
+ReadOnlyMemory<byte> memory = duid.Memory;
+Console.WriteLine(memory.Length); // 4
+```
+
 ---
 
 ### Methods
@@ -69,9 +128,9 @@ var duid = new Duid(new byte[] { 0x00, 0x01, 0x02, 0x03 });
 var bytes = duid.GetBytes();
 ```
 
-#### `ToString()` / `ToString(string format, IFormatProvider)`
+#### `ToString()` / `ToString(string)` / `ToString(string, IFormatProvider)`
 
-Converts the DUID to a colon-delimited uppercase hex string by default. Supports these format strings:
+Converts the DUID to a colon-delimited uppercase hex string by default. The single-argument `ToString(string)` overload is a convenience that delegates to the two-argument form with a `null` format provider. Supports these format strings:
 
 | Format | Description | Example |
 |--------|-------------|---------|
@@ -231,6 +290,40 @@ var deserialized = (Duid)formatter.Deserialize(stream);
 ```
 
 > **Note:** `BinaryFormatter` is removed in .NET 9+. Serialization testing targets `net48` only.
+
+---
+
+### Span Formatting (.NET 8+)
+
+#### `ISpanFormattable`
+
+```csharp
+bool ISpanFormattable.TryFormat(Span<char> destination, out int charsWritten, ReadOnlySpan<char> format, IFormatProvider provider)
+```
+
+Formats the DUID into a character span buffer. Returns `false` if the destination is too small. Uses the same format strings as `ToString(string, IFormatProvider)`.
+
+```csharp
+var duid = new Duid(new byte[] { 0x00, 0x01, 0xA2, 0xB3 });
+Span<char> buffer = stackalloc char[11];
+bool success = ((ISpanFormattable)duid).TryFormat(buffer, out int written, "U:", null);
+// success = true, written = 11, buffer = "00:01:A2:B3"
+```
+
+#### `IUtf8SpanFormattable`
+
+```csharp
+bool IUtf8SpanFormattable.TryFormat(Span<byte> utf8Destination, out int bytesWritten, ReadOnlySpan<char> format, IFormatProvider provider)
+```
+
+Formats the DUID directly into a UTF-8 byte buffer. Returns `false` if the destination is too small. Avoids intermediate string allocations when the output is consumed as UTF-8 bytes.
+
+```csharp
+var duid = new Duid(new byte[] { 0x00, 0x01, 0xA2, 0xB3 });
+Span<byte> utf8Buffer = stackalloc byte[11];
+bool success = ((IUtf8SpanFormattable)duid).TryFormat(utf8Buffer, out int written, "U:", null);
+// success = true, written = 11, utf8Buffer contains UTF-8 bytes of "00:01:A2:B3"
+```
 
 ---
 

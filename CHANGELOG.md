@@ -2,12 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/).
-
 ## [3.0.0] - TBD
 
 ### Added
 
+- `Length` property on `Duid` for retrieving the octet count without allocating a collection.
+- `Span` property (`ReadOnlySpan<byte>`) on `Duid` for zero-allocation access to underlying bytes (.NET 8+).
+- `Memory` property (`ReadOnlyMemory<byte>`) on `Duid` for interop-friendly access to underlying bytes (.NET 8+).
+- `Duid(ReadOnlySpan<byte>)` constructor for stack-friendly DUID creation from span data (.NET 8+).
+- `ToString(string)` convenience overload that delegates to `ToString(string, IFormatProvider)`.
+- `ISpanFormattable` implementation for formatting DUIDs into `Span<char>` buffers (.NET 8+).
+- `IUtf8SpanFormattable` implementation for formatting DUIDs directly into UTF-8 `Span<byte>` buffers (.NET 8+).
 - `API_REFERENCE.md` - comprehensive public API documentation covering construction, validation, formatting, equality, comparison, operators, serialization, and parsing.
 - Whitespace-tolerant parsing - `Parse` and `TryParse` now trim leading and trailing whitespace from input strings.
 - `[NotNullWhen]` and `[MaybeNullWhen]` nullability annotations on `TryParse` overloads for .NET 8+ targets, enabling compiler null analysis after parse results.
@@ -24,10 +29,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 - `Equals(Duid)` optimized to directly access the underlying byte array instead of allocating a `ReadOnlyCollection<byte>` on every equality check.
 - Format string parsing extracted into a dedicated method for cleaner internals (no behavioral change).
 - `DuidRegexSource` renamed to `DuidRegexPatterns` (internal type, not part of public API).
-- Dependency updates: SonarAnalyzer `10.15.0` to `10.29.0`, StyleCop `1.2.0-beta.556` to `1.1.118` (stable), SourceLink `8.0.0` to `10.0.300`, Roslynator `4.14.1` to `4.15.0`.
 
 ### Fixed
 
+- Undelimited hex parsing now accepts uppercase characters (`A-F`). The `UndelimitedOctetPattern` regex was missing `A-F`, causing `TryParse` and `Parse` to reject valid uppercase undelimited DUID strings.
 - `CompareTo(Duid)` and `CompareTo(object)` now return `1` when comparing a non-null DUID to `null`, correcting a violation of the `IComparable<T>` contract. Previously these methods returned `-1`, which incorrectly treated non-null values as less than null.
 
 ### Removed
