@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- This .runsettings file is for local development use with Visual Studio Test Explorer.
+     CI uses dotnet-coverage directly for coverage collection. -->
 <RunSettings>
   <!-- xUnit v3 configuration -->
   <RunConfiguration>

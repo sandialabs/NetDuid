@@ -28,7 +28,6 @@
       not fail with NU1301 (missing local feed).  Only CI workflows that pack
       into smoketests/feed/ first set a non-placeholder version.
     -->
-    <PackageReference Include="NetDuid" Version="$(NetDuidVersion)"
-                      Condition="'$(NetDuidVersion)' != '0.0.0-placeholder'" />
+    <PackageReference Include="NetDuid" Version="$(NetDuidVersion)" Condition="'$(NetDuidVersion)' != '0.0.0-placeholder'" />
   </ItemGroup>
 </Project>

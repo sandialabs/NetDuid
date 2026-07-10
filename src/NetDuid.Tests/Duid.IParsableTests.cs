@@ -84,6 +84,10 @@ namespace NetDuid.Tests
             // mixed delimiters — delimited regex backreference \k<separator> requires a consistent delimiter
             AddTestCase("AB:CD-EF");
             AddTestCase("AB-CD:EF");
+            AddTestCase("AB:CD EF");
+            AddTestCase("AB CD:EF");
+            AddTestCase("AB-CD EF");
+            AddTestCase("AB CD-EF");
 
             // structural problems
             AddTestCase(":AB:CD:EF");

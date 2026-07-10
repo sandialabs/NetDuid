@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-
-namespace NetDuid.Tests
+﻿namespace NetDuid.Tests
 {
     /// <summary>
     ///     A class with static test data

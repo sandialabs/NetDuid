@@ -13,7 +13,7 @@ namespace NetDuid
 #if NET7_0_OR_GREATER
     partial
 #endif
-    class DuidRegexSource
+    class DuidRegexPatterns
     {
         /// <summary>
         ///     Regex pattern that should match a string of hexadecimal octet pairs delimited by a single dash ('-'), colon (':') or space (' ') character. Leading 0 in pair may be omitted.
@@ -53,7 +53,11 @@ namespace NetDuid
             return DelimitedOctetsRegex;
         }
 
-        private static readonly Regex DelimitedOctetsRegex = new Regex(DelimitedOctetsPattern, RegexOptions.Compiled);
+        private static readonly Regex DelimitedOctetsRegex = new(
+            DelimitedOctetsPattern,
+            RegexOptions.Compiled,
+            TimeSpan.FromSeconds(1)
+        );
 #endif
 
         /// <summary>
@@ -69,9 +73,10 @@ namespace NetDuid
             return UndelimitedOctetsRegex;
         }
 
-        private static readonly Regex UndelimitedOctetsRegex = new Regex(
+        private static readonly Regex UndelimitedOctetsRegex = new(
             UndelimitedOctetPattern,
-            RegexOptions.Compiled | RegexOptions.IgnoreCase
+            RegexOptions.Compiled | RegexOptions.IgnoreCase,
+            TimeSpan.FromSeconds(1)
         );
 #endif
     }
