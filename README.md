@@ -1,4 +1,4 @@
-# NetDuid
+﻿# NetDuid
 
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/sandialabs/NetDuid/build.yml?branch=main&logo=github&label=build)
 [![NuGet Version](https://img.shields.io/nuget/v/NetDuid?logo=nuget)](https://www.nuget.org/packages/NetDuid)
@@ -29,6 +29,10 @@ This library is intended for use in various scenarios, including but not limited
 - **Network Configuration**: Managing and configuring network devices that use DHCPv6.
 - **Logging and Monitoring**: Tracking and logging DUIDs in network traffic for monitoring and analysis.
 - **Testing and Simulation**: Simulating DHCPv6 clients and servers in test environments.
+
+## Changelog
+
+For a detailed list of changes, see [CHANGELOG.md](CHANGELOG.md).
 
 ## Getting Started
 
@@ -149,6 +153,7 @@ This project was built with the aid of:
 - [CSharpier](https://csharpier.com/)
 - [dotnet-outdated](https://github.com/dotnet-outdated/dotnet-outdated)
 - [Husky.Net](https://alirezanet.github.io/Husky.Net/)
+- [NSubstitute](https://nsubstitute.github.io/)
 - [Roslynator](https://josefpihrt.github.io/docs/roslynator/)
 - [SonarAnalyzer](https://www.sonarsource.com/products/sonarlint/features/visual-studio/)
 - [StyleCop.Analyzers](https://github.com/DotNetAnalyzers/StyleCopAnalyzers)
@@ -164,19 +169,18 @@ This project uses [Semantic Versioning](https://semver.org/)
 
 The project targets [.NET Standard 2.0](https://learn.microsoft.com/en-us/dotnet/standard/net-standard?tabs=net-standard-2-0), [.NET 8](https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-8), [.NET 9](https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-9/overview), and [.NET 10](https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-10/overview). The test project similarly targets .NET 8, .NET 9, .NET 10, but targets [.NET Framework 4.8](https://dotnet.microsoft.com/en-us/download/dotnet-framework/net48) for the .NET Standard 2.0 tests.
 
-### Commit Hook
+### Commit Hooks
 
-The project itself has a configured pre-commit git hook, via [Husky.Net](https://alirezanet.github.io/Husky.Net/) that automatically lints and formats code via [dotnet format](https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-format) and [csharpier](https://csharpier.com/).
+The project has two pre-commit systems configured:
 
-#### Disable husky in CI/CD pipelines
+1. **[Husky.Net](https://alirezanet.github.io/Husky.Net/)** — lints and stages `.cs` files via `dotnet format` and [CSharpier](https://csharpier.com/).
+2. **[pre-commit](https://pre-commit.com/)** (Python-based) — runs `codespell`, `markdownlint`, trailing-whitespace and end-of-file checks, YAML validation, and CSharpier on all supported file types.
 
-Per the [Husky.Net instructions](https://alirezanet.github.io/Husky.Net/guide/automate.html#disable-husky-in-ci-cd-pipelines)
-
-> You can set the `HUSKY` environment variable to `0` in order to disable husky in CI/CD pipelines.
+Both run automatically on `git commit`. To disable Husky in CI/CD pipelines, set the `HUSKY` environment variable to `0`.
 
 #### Manual Linting and Formatting
 
-On occasion a manual run is desired it may be done so via the `src` directory and with the command
+To run formatting manually from the repository root:
 
 ```shell
 dotnet format style; dotnet format analyzers; dotnet csharpier format .
@@ -186,7 +190,11 @@ These commands may be called independently, but order may matter.
 
 #### Testing
 
-After making changes tests should be run that include all targets
+After making changes, run tests across all target frameworks:
+
+```shell
+dotnet test src --verbosity normal
+```
 
 ## Acknowledgments
 
@@ -202,12 +210,12 @@ Including, but not limited to:
 
 ## Copyright
 
-> Copyright 2025 National Technology & Engineering Solutions of Sandia, LLC (NTESS). Under the terms of Contract DE-NA0003525 with NTESS, the U.S. Government retains certain rights in this software
+> Copyright 2026 National Technology & Engineering Solutions of Sandia, LLC (NTESS). Under the terms of Contract DE-NA0003525 with NTESS, the U.S. Government retains certain rights in this software
 
 ## License
 
 > Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
 >
-> http://www.apache.org/licenses/LICENSE-2.0
+> <http://www.apache.org/licenses/LICENSE-2.0>
 >
 > Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
