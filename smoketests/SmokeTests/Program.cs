@@ -1,3 +1,11 @@
+// NetDuid NuGet package smoke tests.
+//
+// This program is a consumer of the *packed NuGet package* (not a project reference).
+// Its only job is to prove that each target-framework asset (netstandard2.0 via net48,
+// net8.0, net9.0, net10.0) loads correctly and that the public API behaves at runtime.
+//
+// Run via smoketests/run-smoke-tests.{sh,ps1} — those scripts pack the library first.
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,102 +46,13 @@ void RequireEqual<T>(T expected, T actual, string field)
 }
 
 // ---------------------------------------------------------------------------
-// Link-Layer Plus Time DUID (type code 0x0001)
+// Duid — all type variants
 // ---------------------------------------------------------------------------
-Console.WriteLine("Link-Layer Plus Time DUID");
+Console.WriteLine("Duid (all types)");
 
 var llTimeBytes = new byte[] { 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x11, 0x22, 0x33, 0x44, 0x55 };
-var llTimeString = "00:01:00:00:00:00:00:01:00:11:22:33:44:55";
-var llTimeStringDash = "00-01-00-00-00-00-00-01-00-11-22-33-44-55";
-var llTimeStringNoDelim = "0001000000000001001122334455";
-
-Check(
-    "Create from bytes",
-    () =>
-    {
-        var duid = new Duid(llTimeBytes);
-        RequireEqual(DuidType.LinkLayerPlusTime, duid.Type, "Type");
-    }
-);
-
-Check(
-    "Parse colon-delimited string",
-    () =>
-    {
-        var duid = Duid.Parse(llTimeString);
-        RequireEqual(DuidType.LinkLayerPlusTime, duid.Type, "Type");
-        RequireEqual(14, duid.GetBytes().Count, "byte count");
-    }
-);
-
-Check(
-    "Parse dash-delimited string",
-    () =>
-    {
-        var duid = Duid.Parse(llTimeStringDash);
-        RequireEqual(DuidType.LinkLayerPlusTime, duid.Type, "Type");
-    }
-);
-
-Check(
-    "Parse undelimited string",
-    () =>
-    {
-        var duid = Duid.Parse(llTimeStringNoDelim);
-        RequireEqual(DuidType.LinkLayerPlusTime, duid.Type, "Type");
-    }
-);
-
-Check(
-    "TryParse success",
-    () =>
-    {
-        Require(Duid.TryParse("00:01:00:01:02:03", out var duid), "TryParse returned true");
-        Require(duid != null, "duid not null");
-    }
-);
-
-Check(
-    "TryParse failure on garbage",
-    () =>
-    {
-        Require(!Duid.TryParse("not-a-duid", out _), "TryParse returned false");
-    }
-);
-
-// ---------------------------------------------------------------------------
-// Vendor-Assigned DUID (type code 0x0002)
-// ---------------------------------------------------------------------------
-Console.WriteLine("\nVendor-Assigned DUID");
-
-Check(
-    "VendorAssigned type detection",
-    () =>
-    {
-        var duid = new Duid(new byte[] { 0x00, 0x02, 0x00, 0x00, 0x00, 0x01, 0x01, 0x02, 0x03 });
-        RequireEqual(DuidType.VendorAssigned, duid.Type, "Type");
-    }
-);
-
-// ---------------------------------------------------------------------------
-// Link-Layer DUID (type code 0x0003)
-// ---------------------------------------------------------------------------
-Console.WriteLine("\nLink-Layer DUID");
-
-Check(
-    "LinkLayer type detection",
-    () =>
-    {
-        var duid = new Duid(new byte[] { 0x00, 0x03, 0x00, 0x01, 0x02, 0x03, 0x04, 0x05 });
-        RequireEqual(DuidType.LinkLayer, duid.Type, "Type");
-    }
-);
-
-// ---------------------------------------------------------------------------
-// UUID DUID (type code 0x0004) per RFC 6355
-// ---------------------------------------------------------------------------
-Console.WriteLine("\nUUID DUID");
-
+var vendorBytes = new byte[] { 0x00, 0x02, 0x00, 0x00, 0x00, 0x01, 0x01, 0x02, 0x03 };
+var linkLayerBytes = new byte[] { 0x00, 0x03, 0x00, 0x01, 0x02, 0x03, 0x04, 0x05 };
 var uuidBytes = new byte[]
 {
     0x00,
@@ -157,7 +76,34 @@ var uuidBytes = new byte[]
 };
 
 Check(
-    "UUID type detection",
+    "LinkLayerPlusTime type detection",
+    () =>
+    {
+        var duid = new Duid(llTimeBytes);
+        RequireEqual(DuidType.LinkLayerPlusTime, duid.Type, "Type");
+    }
+);
+
+Check(
+    "VendorAssigned type detection",
+    () =>
+    {
+        var duid = new Duid(vendorBytes);
+        RequireEqual(DuidType.VendorAssigned, duid.Type, "Type");
+    }
+);
+
+Check(
+    "LinkLayer type detection",
+    () =>
+    {
+        var duid = new Duid(linkLayerBytes);
+        RequireEqual(DuidType.LinkLayer, duid.Type, "Type");
+    }
+);
+
+Check(
+    "Uuid type detection",
     () =>
     {
         var duid = new Duid(uuidBytes);
@@ -165,13 +111,8 @@ Check(
     }
 );
 
-// ---------------------------------------------------------------------------
-// Undefined DUID (unknown type codes, or single byte)
-// ---------------------------------------------------------------------------
-Console.WriteLine("\nUndefined DUID");
-
 Check(
-    "Unknown type code returns Undefined",
+    "Undefined type for unknown type code",
     () =>
     {
         var duid = new Duid(new byte[] { 0xFF, 0xFE, 0x01, 0x02 });
@@ -180,14 +121,155 @@ Check(
 );
 
 // ---------------------------------------------------------------------------
-// ToString / IFormattable
+// Parse / TryParse
+// ---------------------------------------------------------------------------
+Console.WriteLine("\nParse / TryParse");
+
+var colonString = "00:01:00:00:00:00:00:01:00:11:22:33:44:55";
+var dashString = "00-01-00-00-00-00-00-01-00-11-22-33-44-55";
+var spaceString = "00 01 00 00 00 00 00 01 00 11 22 33 44 55";
+var noDelimString = "0001000000000001001122334455";
+
+Check(
+    "Parse colon-delimited",
+    () =>
+    {
+        var duid = Duid.Parse(colonString);
+        RequireEqual(DuidType.LinkLayerPlusTime, duid.Type, "Type");
+        RequireEqual(14, duid.GetBytes().Count, "byte count");
+    }
+);
+
+Check(
+    "Parse dash-delimited",
+    () =>
+    {
+        var duid = Duid.Parse(dashString);
+        RequireEqual(DuidType.LinkLayerPlusTime, duid.Type, "Type");
+    }
+);
+
+Check(
+    "Parse space-delimited",
+    () =>
+    {
+        var duid = Duid.Parse(spaceString);
+        RequireEqual(DuidType.LinkLayerPlusTime, duid.Type, "Type");
+    }
+);
+
+Check(
+    "Parse undelimited",
+    () =>
+    {
+        var duid = Duid.Parse(noDelimString);
+        RequireEqual(DuidType.LinkLayerPlusTime, duid.Type, "Type");
+    }
+);
+
+Check(
+    "Parse leading-zero-omitted pairs",
+    () =>
+    {
+        var duid = Duid.Parse("1:2:A3:B4");
+        RequireEqual(4, duid.GetBytes().Count, "byte count");
+    }
+);
+
+Check(
+    "Parse trims whitespace",
+    () =>
+    {
+        var duid = Duid.Parse("  00:01:02:03  ");
+        RequireEqual(4, duid.GetBytes().Count, "byte count");
+    }
+);
+
+Check(
+    "Parse is case-insensitive",
+    () =>
+    {
+        var lower = Duid.Parse("ab:cd:ef:01:02:03");
+        var upper = Duid.Parse("AB:CD:EF:01:02:03");
+        Require(lower.Equals(upper), "case-insensitive parse yields equal DUIDs");
+    }
+);
+
+Check(
+    "TryParse success",
+    () =>
+    {
+        Require(Duid.TryParse("00:01:00:01:02:03", out var duid), "TryParse returned true");
+        Require(duid != null, "duid not null");
+    }
+);
+
+Check(
+    "TryParse failure on garbage",
+    () =>
+    {
+        Require(!Duid.TryParse("not-a-duid", out _), "TryParse returned false");
+    }
+);
+
+Check(
+    "Mixed delimiters rejected",
+    () =>
+    {
+        Require(!Duid.TryParse("01:02-A3:B4", out _), "mixed delimiters rejected");
+    }
+);
+
+Check(
+    "Parse rejects null",
+    () =>
+    {
+        try
+        {
+            Duid.Parse(null!);
+            throw new InvalidOperationException("should have thrown");
+        }
+        catch (ArgumentException)
+        {
+            // expected
+        }
+    }
+);
+
+Check(
+    "Parse rejects empty string",
+    () =>
+    {
+        try
+        {
+            Duid.Parse(string.Empty);
+            throw new InvalidOperationException("should have thrown");
+        }
+        catch (ArgumentException)
+        {
+            // expected
+        }
+    }
+);
+
+// ---------------------------------------------------------------------------
+// IFormattable / ToString
 // ---------------------------------------------------------------------------
 Console.WriteLine("\nIFormattable / ToString");
 
 var hexDuid = Duid.Parse("ab:cd:ef:01:02:03");
 
 Check(
-    "ToString default (uppercase colon)",
+    "ToString() parameterless",
+    () =>
+    {
+        var s = hexDuid.ToString();
+        RequireEqual("AB:CD:EF:01:02:03", s, "parameterless ToString");
+    }
+);
+
+Check(
+    "ToString default format (uppercase colon)",
     () =>
     {
         var s = hexDuid.ToString(null, null);
@@ -201,6 +283,15 @@ Check(
     {
         var s = hexDuid.ToString("U-", null);
         RequireEqual("AB-CD-EF-01-02-03", s, "U- format");
+    }
+);
+
+Check(
+    "ToString uppercase no delimiter",
+    () =>
+    {
+        var s = hexDuid.ToString("U", null);
+        RequireEqual("ABCDEF010203", s, "U format");
     }
 );
 
@@ -223,15 +314,6 @@ Check(
 );
 
 Check(
-    "ToString uppercase no delimiter",
-    () =>
-    {
-        var s = hexDuid.ToString("U", null);
-        RequireEqual("ABCDEF010203", s, "U format");
-    }
-);
-
-Check(
     "ToString lowercase no delimiter",
     () =>
     {
@@ -240,8 +322,66 @@ Check(
     }
 );
 
+Check(
+    "ToString empty format defaults to uppercase colon",
+    () =>
+    {
+        var s = hexDuid.ToString("", null);
+        RequireEqual("AB:CD:EF:01:02:03", s, "empty format");
+    }
+);
+
+Check(
+    "ToString invalid format throws FormatException",
+    () =>
+    {
+        try
+        {
+            hexDuid.ToString("X", null);
+            throw new InvalidOperationException("should have thrown");
+        }
+        catch (FormatException)
+        {
+            // expected
+        }
+    }
+);
+
 // ---------------------------------------------------------------------------
-// Equality and HashCode
+// IParsable<Duid> (NET7+ only)
+// ---------------------------------------------------------------------------
+#if NET7_0_OR_GREATER
+Console.WriteLine("\nIParsable<Duid>");
+
+Check(
+    "Parse with IFormatProvider",
+    () =>
+    {
+        var duid = Duid.Parse("ab:cd:ef:01:02:03", (IFormatProvider)null);
+        RequireEqual(6, duid.GetBytes().Count, "byte count");
+    }
+);
+
+Check(
+    "TryParse with IFormatProvider",
+    () =>
+    {
+        Require(Duid.TryParse("ab:cd:ef:01:02:03", (IFormatProvider)null, out var duid), "TryParse succeeded");
+        Require(duid != null, "duid not null");
+    }
+);
+
+Check(
+    "TryParse with IFormatProvider failure",
+    () =>
+    {
+        Require(!Duid.TryParse("garbage", (IFormatProvider)null, out _), "garbage returns false");
+    }
+);
+#endif
+
+// ---------------------------------------------------------------------------
+// Equality
 // ---------------------------------------------------------------------------
 Console.WriteLine("\nEquality");
 
@@ -353,6 +493,78 @@ Check(
 );
 
 // ---------------------------------------------------------------------------
+// Null operator semantics
+// ---------------------------------------------------------------------------
+Console.WriteLine("\nNull operator semantics");
+
+Duid nonNull = new Duid(new byte[] { 0x00, 0x01, 0x02 });
+Duid nullDuid = null;
+
+Check(
+    "null == null is true",
+    () =>
+    {
+        Require(nullDuid == null, "null == null");
+    }
+);
+
+Check(
+    "null != non-null is true",
+    () =>
+    {
+        Require(nullDuid != nonNull, "null != nonNull");
+    }
+);
+
+Check(
+    "non-null > null is true",
+    () =>
+    {
+        Require(nonNull > nullDuid, "nonNull > null");
+    }
+);
+
+Check(
+    "null < non-null is true",
+    () =>
+    {
+        Require(nullDuid < nonNull, "null < nonNull");
+    }
+);
+
+Check(
+    "null >= null is true",
+    () =>
+    {
+        Require(nullDuid >= null, "null >= null");
+    }
+);
+
+Check(
+    "null <= null is true",
+    () =>
+    {
+        Require(nullDuid <= null, "null <= null");
+    }
+);
+
+Check(
+    "non-null >= null is true",
+    () =>
+    {
+        Require(nonNull >= nullDuid, "nonNull >= null");
+    }
+);
+
+Check(
+    "null <= non-null is true",
+    () =>
+    {
+        Require(nullDuid <= nonNull, "null <= nonNull");
+    }
+);
+
+// ---------------------------------------------------------------------------
 // GetBytes
 // ---------------------------------------------------------------------------
 Console.WriteLine("\nGetBytes");
@@ -372,10 +584,11 @@ Check(
     "GetBytes is read-only snapshot",
     () =>
     {
-        var duid = new Duid(llTimeBytes);
+        var original = new byte[] { 0x00, 0x01, 0x02 };
+        var duid = new Duid(original);
         var bytes = duid.GetBytes();
         var first = bytes.First();
-        llTimeBytes[0] = 0xFF;
+        original[0] = 0xFF;
         Require(bytes.First() == first, "GetBytes returns a snapshot, not a live view");
     }
 );
@@ -409,44 +622,12 @@ Check(
 );
 
 Check(
-    "Parse rejects null",
-    () =>
-    {
-        try
-        {
-            Duid.Parse(null);
-            throw new InvalidOperationException("should have thrown");
-        }
-        catch (ArgumentException)
-        {
-            // expected
-        }
-    }
-);
-
-Check(
-    "Parse rejects empty string",
-    () =>
-    {
-        try
-        {
-            Duid.Parse("");
-            throw new InvalidOperationException("should have thrown");
-        }
-        catch (ArgumentException)
-        {
-            // expected
-        }
-    }
-);
-
-Check(
     "Constructor rejects null bytes",
     () =>
     {
         try
         {
-            _ = new Duid(null);
+            _ = new Duid(null!);
             throw new InvalidOperationException("should have thrown");
         }
         catch (ArgumentNullException)
@@ -501,14 +682,6 @@ Check(
         {
             // expected
         }
-    }
-);
-
-Check(
-    "TryParse returns false for garbage",
-    () =>
-    {
-        Require(!Duid.TryParse("ZZZ", out _), "garbage input");
     }
 );
 

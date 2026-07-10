@@ -65,12 +65,15 @@ Covers **net48** (→ `netstandard2.0` asset), **net8.0**, **net9.0**, **net10.0
 
 | Area | Checks |
 |---|---|
-| `Duid` (all types) | Create from bytes, Parse/TryParse (colon, dash, undelimited), type detection |
-| `IFormattable` / `ToString` | Default (uppercase colon), uppercase dash, lowercase colon, lowercase dash, no delimiter |
+| `Duid` (all types) | Create from bytes, type detection for all 5 `DuidType` values |
+| Parse / TryParse | Colon, dash, space, undelimited, leading-zero-omitted, whitespace trim, case-insensitive, mixed-delimiter rejection, null/empty rejection |
+| `IFormattable` / `ToString` | All 6 format strings (`null`, `""`, `"U:"`, `"U-"`, `"U"`, `"L:"`, `"L-"`, `"L"`), invalid format throws `FormatException` |
+| `IParsable<Duid>` (NET7+) | `Parse(string, IFormatProvider)`, `TryParse(string, IFormatProvider, out Duid)` success and failure |
 | Equality | Same bytes, different bytes, null, `==`, `!=`, `GetHashCode` |
-| Comparison | `CompareTo`, `<`, `>`, `<=`, `>=` |
+| Comparison | `CompareTo` (shorter, longer, equal), `<`, `>`, `<=`, `>=` |
+| Null operator semantics | `null == null`, `null != non-null`, `non-null > null`, `null < non-null`, `>=`, `<=` with null |
 | `GetBytes` | Content, read-only snapshot semantics |
-| Edge cases | 3-byte minimum, 130-byte maximum, null/empty/garbage input |
+| Edge cases | 3-byte minimum, 130-byte maximum, constructor rejects null/empty/2-byte/131-byte |
 
 ## How the package reference works
 
