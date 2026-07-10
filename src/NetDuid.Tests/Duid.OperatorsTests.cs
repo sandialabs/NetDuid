@@ -88,13 +88,14 @@ namespace NetDuid.Tests
             TestCase(1, nonNullDuid, null);
             TestCase(-1, null, nonNullDuid);
 
-            // non-null operands (in theory based on CompareTo)
+            // non-null operands (manually computed: length-first, then byte-by-byte)
             var otherDuidBytes = new byte[] { 0xFF, 0x00, 0x80 };
             var otherDuid = new Duid(otherDuidBytes);
 
-            TestCase(nonNullDuid.CompareTo(otherDuid), nonNullDuid, otherDuid);
-            TestCase(otherDuid.CompareTo(nonNullDuid), otherDuid, nonNullDuid);
-            TestCase(otherDuid.CompareTo(otherDuid), otherDuid, otherDuid);
+            // both same length (3), first byte: 0x00 < 0xFF → nonNullDuid < otherDuid
+            TestCase(-1, nonNullDuid, otherDuid);
+            TestCase(1, otherDuid, nonNullDuid);
+            TestCase(0, otherDuid, otherDuid);
 
             return theoryData;
 

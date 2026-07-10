@@ -6,7 +6,7 @@
     public enum DuidType
     {
         /// <summary>
-        ///     An unspecified DUID type not specified in RFC8415 of RFC6355
+        ///     An unspecified DUID type not specified in RFC8415 or RFC6355
         /// </summary>
         /// <remarks>DUID type code <c>0x0000</c> or within range <c>0x0005</c>-<c>0xFFFF</c> inclusive</remarks>
         Undefined = 0,

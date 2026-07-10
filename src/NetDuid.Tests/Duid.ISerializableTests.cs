@@ -1,6 +1,4 @@
-﻿#if !NET9_0_OR_GREATER
-using System;
-using System.IO;
+﻿#if NET48
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -32,25 +30,23 @@ namespace NetDuid.Tests
         public void Serializable_Test(Duid duid)
         {
             // Arrange
-            using (var stream = new MemoryStream())
-            {
+            using var stream = new MemoryStream();
 #if !NET48
 #pragma warning disable SYSLIB0011
 #endif
-                var formatter = new BinaryFormatter();
+            var formatter = new BinaryFormatter();
 
-                // Act
-                formatter.Serialize(stream, duid); // serialize
-                stream.Seek(0, SeekOrigin.Begin);
-                var result = formatter.Deserialize(stream) as Duid; // deserialize
+            // Act
+            formatter.Serialize(stream, duid); // serialize
+            stream.Seek(0, SeekOrigin.Begin);
+            var result = formatter.Deserialize(stream) as Duid; // deserialize
 #if !NET48
 #pragma warning restore SYSLIB0011
 #endif
 
-                // Assert
-                Assert.NotNull(result);
-                Assert.Equal(duid, result);
-            }
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(duid, result);
         }
 
         [Theory]
@@ -58,25 +54,23 @@ namespace NetDuid.Tests
         public void Serializable_GetHashCode_Test(Duid duid)
         {
             // Arrange
-            using (var stream = new MemoryStream())
-            {
+            using var stream = new MemoryStream();
 #if !NET48
 #pragma warning disable SYSLIB0011
 #endif
-                var formatter = new BinaryFormatter();
+            var formatter = new BinaryFormatter();
 
-                // Act
-                formatter.Serialize(stream, duid);
-                stream.Seek(0, SeekOrigin.Begin);
-                var result = formatter.Deserialize(stream) as Duid;
+            // Act
+            formatter.Serialize(stream, duid);
+            stream.Seek(0, SeekOrigin.Begin);
+            var result = formatter.Deserialize(stream) as Duid;
 #if !NET48
 #pragma warning restore SYSLIB0011
 #endif
 
-                // Assert
-                Assert.NotNull(result);
-                Assert.Equal(duid.GetHashCode(), result.GetHashCode());
-            }
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(duid.GetHashCode(), result.GetHashCode());
         }
 
         #endregion
@@ -100,12 +94,12 @@ namespace NetDuid.Tests
             var ctor = typeof(Duid).GetConstructor(
                 BindingFlags.NonPublic | BindingFlags.Instance,
                 null,
-                new[] { typeof(SerializationInfo), typeof(StreamingContext) },
+                [typeof(SerializationInfo), typeof(StreamingContext)],
                 null
             );
 
             // Act
-            var exception = Assert.Throws<TargetInvocationException>(() => ctor.Invoke(new object[] { info, context }));
+            var exception = Assert.Throws<TargetInvocationException>(() => ctor.Invoke([info, context]));
 
             // Assert
             Assert.IsType<SerializationException>(exception.InnerException);
@@ -133,12 +127,12 @@ namespace NetDuid.Tests
             var ctor = typeof(Duid).GetConstructor(
                 BindingFlags.NonPublic | BindingFlags.Instance,
                 null,
-                new[] { typeof(SerializationInfo), typeof(StreamingContext) },
+                [typeof(SerializationInfo), typeof(StreamingContext)],
                 null
             );
 
             // Act
-            var exception = Assert.Throws<TargetInvocationException>(() => ctor.Invoke(new object[] { info, context }));
+            var exception = Assert.Throws<TargetInvocationException>(() => ctor.Invoke([info, context]));
 
             // Assert
             Assert.IsType<SerializationException>(exception.InnerException);

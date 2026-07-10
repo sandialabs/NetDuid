@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace NetDuid
+﻿namespace NetDuid
 {
     /// <content>
     ///     <see cref="Duid"/> implementation of <see cref="IComparable{Duid}"/> and <see cref="IComparable"/>
@@ -10,7 +8,7 @@ namespace NetDuid
         #region CompareTo
 
         /// <inheritdoc/>
-        /// <remark>Sorting is not done in mathematical order, but rather by length then value</remark>
+        /// <remarks>Sorting is not done in mathematical order, but rather by length then value</remarks>
         public int CompareTo(Duid other)
         {
             if (ReferenceEquals(this, other))

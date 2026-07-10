@@ -9,10 +9,6 @@ updates:
       day: "sunday"
     allow:
       - dependency-type: direct
-    ignore:
-      - dependency-name: "*"
-        update-types:
-          - "version-update:semver-patch"
     commit-message:
       prefix: "Dependabot package update"
     open-pull-requests-limit: 5

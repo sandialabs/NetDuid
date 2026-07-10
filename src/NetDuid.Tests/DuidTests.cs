@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 using NetDuid;
 using NetDuid.Tests.XunitSerializers;
 using Xunit;
@@ -110,6 +108,19 @@ namespace NetDuid.Tests
             Assert.Throws<ArgumentNullException>(() => new Duid(null));
         }
 
+        [Fact]
+        public void Constructor_ListByte_CreatesValidDuid_Test()
+        {
+            // Arrange
+            var bytes = new List<byte> { 0x00, 0x01, 0xAA, 0xBB, 0xCC };
+
+            // Act
+            var duid = new Duid(bytes);
+
+            // Assert
+            Assert.Equal(bytes, duid.GetBytes());
+        }
+
         #endregion
 
         #region DuidType
@@ -216,7 +227,7 @@ namespace NetDuid.Tests
             var result = duid.GetBytes();
 
             // Assert
-            Assert.IsAssignableFrom<IReadOnlyCollection<byte>>(result);
+            Assert.IsType<IReadOnlyCollection<byte>>(result, exactMatch: false);
             Assert.Equal(inputBytes.Length, result.Count);
         }
 
@@ -238,7 +249,7 @@ namespace NetDuid.Tests
         public void GetBytes_ReturnsReadOnlyView_Test()
         {
             // Arrange
-            var duid = new Duid(new byte[] { 0x00, 0x01, 0x02 });
+            var duid = new Duid([0x00, 0x01, 0x02]);
 
             // Act
             var result = duid.GetBytes();

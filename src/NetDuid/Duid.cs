@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
+﻿using System.Diagnostics;
 
 namespace NetDuid
 {
@@ -41,7 +38,7 @@ namespace NetDuid
             _duidBytes = ConstructWithBytesGuard(bytes);
             Type = GetDuidType();
 
-            _lazyHashCode = new Lazy<int>(ComputeHashCode); // for a lazy hash code requiring only a single generation
+            _lazyHashCode = new Lazy<int>(ComputeHashCode);
         }
 
         /// <summary>

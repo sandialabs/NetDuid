@@ -60,7 +60,7 @@
 
             if (lhs is null)
             {
-                return !(rhs is null); // null is considered less than any non-null value
+                return rhs is not null; // null is considered less than any non-null value
             }
 
             if (rhs is null)
@@ -89,7 +89,7 @@
 
             if (lhs is null)
             {
-                return !(rhs is null); // null is considered less than any non-null value
+                return rhs is not null; // null is considered less than any non-null value
             }
 
             if (rhs is null)
