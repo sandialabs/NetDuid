@@ -29,6 +29,7 @@
     <File Path="../.github/workflows/publish.yml" />
   </Folder>
   <Folder Name="/Solution Items/solution/" />
+  <Project Path="src/NetDuid.Benchmarks/NetDuid.Benchmarks.csproj" />
   <Project Path="src/NetDuid.Tests/NetDuid.Tests.csproj" />
   <Project Path="src/NetDuid/NetDuid.csproj" />
 </Solution>
